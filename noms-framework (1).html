@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOMS Framework · Métastases Rachidiennes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e12;
+  --surface: #16161c;
+  --surface2: #1e1e26;
+  --border: #2a2a36;
+  --text: #e8e4dc;
+  --text-dim: #7a7890;
+  --text-mid: #a8a4bc;
+
+  --n-color: #6c8ebf;
+  --o-color: #c47c3e;
+  --m-color: #5a9e7a;
+  --s-color: #9e5a8e;
+
+  --cebrt: #4a90d9;
+  --srs: #e8a44a;
+  --surgery: #d9604a;
+  --stabilization: #7dbb8e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 3rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.logo-area {}
+
+.logo-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+h1 .noms-letters {
+  display: inline-flex;
+  gap: 0;
+}
+
+h1 .nl { color: var(--n-color); }
+h1 .ol { color: var(--o-color); }
+h1 .ml { color: var(--m-color); }
+h1 .sl { color: var(--s-color); }
+
+h1 .title-rest {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 1.4rem;
+  display: block;
+  margin-top: 0.2rem;
+  letter-spacing: 0;
+}
+
+.ref-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.4rem 0.7rem;
+  line-height: 1.6;
+  text-align: right;
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+/* ── MAIN LAYOUT ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+/* ── NOMS PILLARS ── */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.pillar {
+  background: var(--surface);
+  padding: 1.5rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.pillar:hover { background: var(--surface2); }
+
+.pillar.active {
+  background: var(--surface2);
+}
+
+.pillar-letter {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  font-weight: 400;
+  margin-bottom: 0.4rem;
+  transition: opacity 0.3s;
+}
+
+.pillar.N .pillar-letter { color: var(--n-color); }
+.pillar.O .pillar-letter { color: var(--o-color); }
+.pillar.M .pillar-letter { color: var(--m-color); }
+.pillar.S .pillar-letter { color: var(--s-color); }
+
+.pillar-title {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  margin-bottom: 0.3rem;
+}
+
+.pillar-sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.pillar-check {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  transition: all 0.3s;
+}
+
+.pillar.done .pillar-check {
+  background: var(--m-color);
+  border-color: var(--m-color);
+  color: #000;
+}
+
+/* ── SECTION PANELS ── */
+.section-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.section-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-letter-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: 5rem;
+  line-height: 1;
+  font-weight: 400;
+  opacity: 0.15;
+}
+
+.N .section-letter-big { color: var(--n-color); opacity: 1; }
+.O .section-letter-big { color: var(--o-color); opacity: 1; }
+.M .section-letter-big { color: var(--m-color); opacity: 1; }
+.S .section-letter-big { color: var(--s-color); opacity: 1; }
+
+.section-title-area {}
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.section-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-top: 0.3rem;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cards-grid.three { grid-template-columns: repeat(3, 1fr); }
+.cards-grid.four { grid-template-columns: repeat(4, 1fr); }
+
+.choice-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 1.2rem 1.3rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.choice-card:hover {
+  border-color: var(--text-dim);
+  background: var(--surface2);
+}
+
+.choice-card.selected {
+  border-color: currentColor;
+  background: var(--surface2);
+}
+
+.choice-card.N-card.selected { border-color: var(--n-color); color: var(--n-color); }
+.choice-card.O-card.selected { border-color: var(--o-color); color: var(--o-color); }
+.choice-card.M-card.selected { border-color: var(--m-color); color: var(--m-color); }
+.choice-card.S-card.selected { border-color: var(--s-color); color: var(--s-color); }
+
+.card-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  color: inherit;
+  opacity: 0.25;
+  transition: opacity 0.2s;
+}
+
+.choice-card.selected .card-value { opacity: 1; }
+
+.card-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.card-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Radiosensitivity visual */
+.radiosens-bar {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+  height: 44px;
+}
+
+.rs-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: default;
+  transition: flex 0.4s;
+}
+
+.rs-high { background: rgba(108,142,191,0.15); color: var(--n-color); border-right: 1px solid var(--border); }
+.rs-inter { background: rgba(196,124,62,0.1); color: var(--o-color); border-right: 1px solid var(--border); }
+.rs-low { background: rgba(158,90,142,0.1); color: var(--s-color); }
+
+.rs-tumors { font-size: 0.68rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.5; }
+.rs-tumors span { color: var(--text-mid); }
+
+/* SINS mini summary */
+.sins-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sins-score-mini {
+  font-family: 'DM Mono', monospace;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--m-color);
+  min-width: 3rem;
+}
+
+.sins-label { font-size: 0.8rem; color: var(--text-dim); }
+.sins-note { font-size: 0.72rem; color: var(--text-dim); font-style: italic; margin-top: 0.15rem; }
+
+/* Continue button */
+.btn-next {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 0.65rem 1.8rem;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-next:hover {
+  border-color: var(--text-mid);
+  background: var(--surface2);
+}
+
+.btn-next.primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.btn-next.primary:hover {
+  background: var(--text-mid);
+  border-color: var(--text-mid);
+}
+
+/* ── RESULT PANEL ── */
+#result-section {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+#result-section.visible { display: block; }
+
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.result-top {
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+}
+
+.result-decision {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+
+.decision-cebrt { color: var(--cebrt); }
+.decision-srs { color: var(--srs); }
+.decision-surgery { color: var(--surgery); }
+.decision-stabilization { color: var(--stabilization); }
+.decision-mixed { color: var(--text); }
+
+.result-rationale {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.7;
+  max-width: 700px;
+}
+
+/* Summary grid */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+
+.summary-cell {
+  padding: 1.2rem 1.5rem;
+  border-right: 1px solid var(--border);
+}
+
+.summary-cell:last-child { border-right: none; }
+
+.summary-dim {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.summary-cell.N .summary-dim { color: var(--n-color); }
+.summary-cell.O .summary-dim { color: var(--o-color); }
+.summary-cell.M .summary-dim { color: var(--m-color); }
+.summary-cell.S .summary-dim { color: var(--s-color); }
+
+.summary-val {
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.summary-note {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+/* Decision tags */
+.decision-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.dtag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+}
+
+.dtag-cebrt { color: var(--cebrt); }
+.dtag-srs { color: var(--srs); }
+.dtag-surgery { color: var(--surgery); }
+.dtag-stabilize { color: var(--stabilization); }
+
+/* Reset */
+.btn-reset {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.btn-reset:hover { color: var(--text); }
+
+/* Nav dots */
+.step-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.step-dot.active { background: var(--text); transform: scale(1.3); }
+.step-dot.done { background: var(--m-color); }
+
+.step-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-left: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+/* Warning */
+.warn-msg {
+  display: none;
+  font-size: 0.8rem;
+  color: var(--o-color);
+  font-style: italic;
+  margin-top: 0.8rem;
+  padding: 0.5rem 0.8rem;
+  border-left: 2px solid var(--o-color);
+}
+
+.warn-msg.visible { display: block; }
+
+@media (max-width: 700px) {
+  .pillars { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid { grid-template-columns: 1fr; }
+  .cards-grid.three, .cards-grid.four { grid-template-columns: 1fr 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  header { flex-direction: column; }
+  h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-tag">Cadre décisionnel · Métastases rachidiennes · MSKCC</div>
+    <h1>
+      <span class="noms-letters">
+        <span class="nl">N</span><span class="ol">O</span><span class="ml">M</span><span class="sl">S</span>
+      </span>
+      <span class="title-rest">Framework</span>
+    </h1>
+  </div>
+  <div class="ref-pill">
+    Laufer et al., <em>The Oncologist</em> 2013;18:744–751<br>
+    <span class="nl">N</span>eurologic · <span class="ol">O</span>ncologic · <span class="ml">M</span>echanical · <span class="sl">S</span>ystemic
+  </div>
+</header>
+
+<main>
+
+  <!-- Pillars nav -->
+  <div class="pillars" id="pillars-nav">
+    <div class="pillar N" data-step="0" onclick="goStep(0)">
+      <div class="pillar-check" id="check-0"></div>
+      <div class="pillar-letter">N</div>
+      <div class="pillar-title">Neurologic</div>
+      <div class="pillar-sub">Grade ESCC (Bilsky)<br>± myélopathie</div>
+    </div>
+    <div class="pillar O" data-step="1" onclick="goStep(1)">
+      <div class="pillar-check" id="check-1"></div>
+      <div class="pillar-letter">O</div>
+      <div class="pillar-title">Oncologic</div>
+      <div class="pillar-sub">Radiosensibilité<br>tumorale</div>
+    </div>
+    <div class="pillar M" data-step="2" onclick="goStep(2)">
+      <div class="pillar-check" id="check-2"></div>
+      <div class="pillar-letter">M</div>
+      <div class="pillar-title">Mechanical</div>
+      <div class="pillar-sub">Score SINS<br>stabilité rachidienne</div>
+    </div>
+    <div class="pillar S" data-step="3" onclick="goStep(3)">
+      <div class="pillar-check" id="check-3"></div>
+      <div class="pillar-letter">S</div>
+      <div class="pillar-title">Systemic</div>
+      <div class="pillar-sub">Candidat à la<br>chirurgie ?</div>
+    </div>
+  </div>
+
+  <!-- Step nav dots -->
+  <div class="step-nav" id="step-nav">
+    <div class="step-dot active" id="dot-0" onclick="goStep(0)"></div>
+    <div class="step-dot" id="dot-1" onclick="goStep(1)"></div>
+    <div class="step-dot" id="dot-2" onclick="goStep(2)"></div>
+    <div class="step-dot" id="dot-3" onclick="goStep(3)"></div>
+    <span class="step-label" id="step-label">Étape 1 / 4 — Neurologique</span>
+  </div>
+
+  <!-- ── STEP 0: NEUROLOGIC ── -->
+  <div class="section-panel N active" id="panel-0">
+    <div class="section-header">
+      <div class="section-letter-big N">N</div>
+      <div class="section-title-area">
+        <div class="section-title">Évaluation neurologique</div>
+        <div class="section-desc">Grade de compression épidural (échelle ESCC de Bilsky, IRM T2 axiale au site de compression maximale). La myélopathie clinique est évaluée séparément mais suit le même arbre décisionnel.</div>
+      </div>
+    </div>
+
+    <!-- Bilsky grading -->
+    <div class="cards-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom:0.5rem;">
+      <div class="choice-card N-card" data-group="escc" data-val="low" onclick="selectCard(this,'escc')">
+        <div class="card-value" style="font-size:1.1rem">0 · 1a · 1b</div>
+        <div class="card-title">ESCC bas grade</div>
+        <div class="card-desc">Maladie osseuse pure ou extension épidurale sans compression médullaire · Sac dural intact ou refoulé sans contact moelle</div>
+        <div class="card-badge" style="background:rgba(108,142,191,0.15);color:var(--n-color)">Low-grade</div>
+      </div>
+      <div class="choice-card N-card" data-group="escc" data-val="1c" onclick="selectCard(this,'escc')">
+        <div class="card-value" style="font-size:1.1rem">1c</div>
+        <div class="card-title">Grade 1c (limite)</div>
+        <div class="card-desc">Contact moelle sans compression · LCR visible · Rôle de la chirurgie non clairement défini — hypofractionnement possible</div>
+        <div class="card-badge" style="background:rgba(196,124,62,0.15);color:var(--o-color)">Borderline</div>
+      </div>
+      <div class="choice-card N-card" data-group="escc" data-val="high" onclick="selectCard(this,'escc')">
+        <div class="card-value" style="font-size:1.1rem">2 · 3</div>
+        <div class="card-title">ESCC haut grade ± myélopathie</div>
+        <div class="card-desc">Compression médullaire avec LCR visible (grade 2) ou sans LCR visible (grade 3) · Risque neurologique élevé</div>
+        <div class="card-badge" style="background:rgba(158,90,142,0.15);color:var(--s-color)">High-grade</div>
+      </div>
+    </div>
+
+    <!-- Bilsky visual legend -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:0.8rem 1rem;margin-bottom:1.5rem;font-size:0.72rem;color:var(--text-dim);line-height:1.8;">
+      <span style="color:var(--n-color);font-family:'DM Mono',monospace;">0</span> Os seul ·
+      <span style="color:var(--n-color);font-family:'DM Mono',monospace;">1a</span> Extension épidurale sans déformation thécale ·
+      <span style="color:var(--n-color);font-family:'DM Mono',monospace;">1b</span> Déformation thécale sans contact moelle ·
+      <span style="color:var(--o-color);font-family:'DM Mono',monospace;">1c</span> Contact moelle sans compression ·
+      <span style="color:var(--s-color);font-family:'DM Mono',monospace;">2</span> Compression + LCR visible ·
+      <span style="color:var(--s-color);font-family:'DM Mono',monospace;">3</span> Compression sans LCR visible
+    </div>
+
+    <div class="warn-msg" id="warn-0">Sélectionner un grade ESCC pour continuer.</div>
+    <button class="btn-next primary" onclick="nextStep(0)">Évaluation oncologique →</button>
+  </div>
+
+  <!-- ── STEP 1: ONCOLOGIC ── -->
+  <div class="section-panel O" id="panel-1">
+    <div class="section-header">
+      <div class="section-letter-big O">O</div>
+      <div class="section-title-area">
+        <div class="section-title">Évaluation oncologique</div>
+        <div class="section-desc">Radiosensibilité tumorale à la RT conventionnelle (cEBRT). Les tumeurs intermédiaires sont traitées comme radiosensibles dans ce framework. Les tumeurs radiorésistantes nécessitent une SRS pour un contrôle local durable.</div>
+      </div>
+    </div>
+
+    <div class="radiosens-bar">
+      <div class="rs-zone rs-high">↑ Haute radiosensibilité</div>
+      <div class="rs-zone rs-inter">Intermédiaire</div>
+      <div class="rs-zone rs-low">Basse · « radiorésistant »</div>
+    </div>
+
+    <div class="rs-tumors">
+      <span>Haute :</span> Lymphome · Myélome · Séminome · Cancer à petites cellules &nbsp;|&nbsp;
+      <span>Intermédiaire :</span> Sein · Prostate · Gastro-intestinal · CBNPC &nbsp;|&nbsp;
+      <span>Basse :</span> Mélanome · Carcinome rénal · Sarcome · Thyroïde
+    </div>
+
+    <div class="cards-grid" style="grid-template-columns: repeat(3,1fr);">
+      <div class="choice-card O-card" data-group="radio" data-val="sensitive" onclick="selectCard(this,'radio')">
+        <div class="card-value">RS</div>
+        <div class="card-title">Radiosensible</div>
+        <div class="card-desc">Lymphome · Myélome · Séminome · CPC · Sein · Prostate<br><em style="font-size:0.7rem;opacity:0.7">Réponse satisfaisante à la cEBRT — contrôle local durable</em></div>
+      </div>
+      <div class="choice-card O-card" data-group="radio" data-val="sensitive" onclick="selectCard(this,'radio')">
+        <div class="card-value">RI</div>
+        <div class="card-title">Radiosensibilité intermédiaire</div>
+        <div class="card-desc">GI · CBNPC<br><em style="font-size:0.7rem;opacity:0.7">Traité comme radiosensible dans le NOMS framework</em></div>
+        <div class="card-badge" style="background:rgba(196,124,62,0.15);color:var(--o-color)">→ RS</div>
+      </div>
+      <div class="choice-card O-card" data-group="radio" data-val="resistant" onclick="selectCard(this,'radio')">
+        <div class="card-value">RR</div>
+        <div class="card-title">Radiorésistant</div>
+        <div class="card-desc">Mélanome · Rénal · Sarcome · Thyroïde<br><em style="font-size:0.7rem;opacity:0.7">Nécessite SRS/IGRT pour contrôle local durable (&gt;85%)</em></div>
+      </div>
+    </div>
+
+    <div class="warn-msg" id="warn-1">Sélectionner la radiosensibilité tumorale pour continuer.</div>
+    <div style="margin-top:1.2rem;display:flex;gap:0.8rem;">
+      <button class="btn-next" onclick="goStep(0)">← Retour</button>
+      <button class="btn-next primary" onclick="nextStep(1)">Évaluation mécanique →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: MECHANICAL ── -->
+  <div class="section-panel M" id="panel-2">
+    <div class="section-header">
+      <div class="section-letter-big M">M</div>
+      <div class="section-title-area">
+        <div class="section-title">Évaluation mécanique</div>
+        <div class="section-desc">Score SINS (0–18). Un score indéterminé (7–12) est traité comme stable dans le NOMS framework — une évaluation chirurgicale est toutefois recommandée. Indiquer le score SINS ou utiliser l'outil SINS dédié.</div>
+      </div>
+    </div>
+
+    <!-- SINS quick entry -->
+    <div style="margin-bottom:1.2rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);">Score SINS (0–18)</div>
+        <a href="https://ronant99-lgtm.github.io/meta-os/sins-calculator.html" target="_blank"
+          style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--m-color);text-decoration:none;border:1px solid var(--m-color);padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.8;transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+          ↗ Calculateur SINS
+        </a>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <input type="number" id="sins-input" min="0" max="18" placeholder="—"
+          style="font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;width:90px;background:var(--surface);border:1.5px solid var(--border);color:var(--text);padding:0.4rem 0.6rem;border-radius:2px;text-align:center;"
+          oninput="updateSINS(this.value)">
+        <div id="sins-interp" style="font-size:0.85rem;color:var(--text-dim);line-height:1.5;"></div>
+      </div>
+    </div>
+
+    <div class="cards-grid" style="grid-template-columns: repeat(3,1fr);">
+      <div class="choice-card M-card" data-group="stability" data-val="stable" id="mc-stable" onclick="selectMech('stable')">
+        <div class="card-value" style="color:var(--m-color)">0–6</div>
+        <div class="card-title">Stable</div>
+        <div class="card-desc">Pas de stabilisation chirurgicale nécessaire sur la base du SINS</div>
+      </div>
+      <div class="choice-card M-card" data-group="stability" data-val="stable" id="mc-indet" onclick="selectMech('indeterminate')">
+        <div class="card-value" style="color:var(--o-color)">7–12</div>
+        <div class="card-title">Indéterminé</div>
+        <div class="card-desc">Évaluation chirurgicale recommandée · Traité comme <strong>stable</strong> dans le NOMS</div>
+        <div class="card-badge" style="background:rgba(196,124,62,0.15);color:var(--o-color)">→ Stable</div>
+      </div>
+      <div class="choice-card M-card" data-group="stability" data-val="unstable" id="mc-unstable" onclick="selectMech('unstable')">
+        <div class="card-value" style="color:var(--surgery)">13–18</div>
+        <div class="card-title">Instable</div>
+        <div class="card-desc">Stabilisation chirurgicale indiquée · Indication indépendante des autres facteurs NOMS</div>
+      </div>
+    </div>
+
+    <div class="warn-msg" id="warn-2">Sélectionner la stabilité mécanique pour continuer.</div>
+    <div style="margin-top:1.2rem;display:flex;gap:0.8rem;">
+      <button class="btn-next" onclick="goStep(1)">← Retour</button>
+      <button class="btn-next primary" onclick="nextStep(2)">Évaluation systémique →</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: SYSTEMIC ── -->
+  <div class="section-panel S" id="panel-3">
+    <div class="section-header">
+      <div class="section-letter-big S">S</div>
+      <div class="section-title-area">
+        <div class="section-title">Évaluation systémique</div>
+        <div class="section-desc">Capacité à tolérer une intervention chirurgicale : état général, comorbidités, étendue de la maladie systémique, disponibilité d'un traitement systémique post-opératoire. Ce paramètre ne s'applique qu'en cas d'instabilité ou de compression médullaire haut grade radiorésistante.</div>
+      </div>
+    </div>
+
+    <div class="cards-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="choice-card S-card" data-group="surgery" data-val="yes" onclick="selectCard(this,'surgery')">
+        <div class="card-value" style="color:var(--s-color)">✓</div>
+        <div class="card-title">Candidat à la chirurgie</div>
+        <div class="card-desc">Capable de tolérer l'anesthésie et la chirurgie · Traitement systémique disponible en post-opératoire · Récupération fonctionnelle attendue avant progression</div>
+      </div>
+      <div class="choice-card S-card" data-group="surgery" data-val="no" onclick="selectCard(this,'surgery')">
+        <div class="card-value" style="color:var(--text-dim)">✗</div>
+        <div class="card-title">Non-candidat à la chirurgie</div>
+        <div class="card-desc">Comorbidités sévères · Progression systémique rapide · Survie insuffisante pour bénéficier de la récupération post-opératoire</div>
+      </div>
+    </div>
+
+    <div class="warn-msg" id="warn-3">Sélectionner le statut chirurgical pour obtenir la recommandation.</div>
+    <div style="margin-top:1.2rem;display:flex;gap:0.8rem;">
+      <button class="btn-next" onclick="goStep(2)">← Retour</button>
+      <button class="btn-next primary" onclick="computeNOMS()">Obtenir la recommandation →</button>
+    </div>
+  </div>
+
+  <!-- ── RESULT ── -->
+  <div id="result-section">
+    <div class="result-card">
+      <div class="result-top">
+        <div class="result-label">Recommandation NOMS</div>
+        <div class="result-decision" id="res-decision">—</div>
+        <div class="decision-tags" id="res-tags"></div>
+        <div class="result-rationale" id="res-rationale" style="margin-top:1rem;">—</div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-cell N">
+          <div class="summary-dim">Neurologique</div>
+          <div class="summary-val" id="sum-n">—</div>
+          <div class="summary-note" id="sum-n-note"></div>
+        </div>
+        <div class="summary-cell O">
+          <div class="summary-dim">Oncologique</div>
+          <div class="summary-val" id="sum-o">—</div>
+          <div class="summary-note" id="sum-o-note"></div>
+        </div>
+        <div class="summary-cell M">
+          <div class="summary-dim">Mécanique</div>
+          <div class="summary-val" id="sum-m">—</div>
+          <div class="summary-note" id="sum-m-note"></div>
+        </div>
+        <div class="summary-cell S">
+          <div class="summary-dim">Systémique</div>
+          <div class="summary-val" id="sum-s">—</div>
+          <div class="summary-note" id="sum-s-note"></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="btn-reset" onclick="resetAll()">↺ Nouvelle évaluation</button>
+    </div>
+    <div style="margin-top:1.5rem;font-size:0.72rem;color:var(--text-dim);font-style:italic;text-align:center;line-height:1.7;">
+      NOMS framework · Laufer et al., The Oncologist 2013. Outil d'aide à la décision multidisciplinaire.<br>
+      Ne se substitue pas à la discussion en RCP ni au jugement clinique individuel.
+    </div>
+  </div>
+
+</main>
+
+<script>
+const state = {
+  escc: null,
+  radio: null,
+  stability: null,
+  stabilityRaw: null, // 'stable','indeterminate','unstable'
+  surgery: null,
+  sins: null,
+  currentStep: 0
+};
+
+const stepLabels = ['Neurologique','Oncologique','Mécanique','Systémique'];
+
+function goStep(n) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach((d,i) => {
+    d.classList.remove('active');
+    if (i < n && [state.escc, state.radio, state.stability, state.surgery][i]) d.classList.add('done');
+    else if (i === n) d.classList.add('active');
+  });
+  document.querySelectorAll('.pillar').forEach((p,i) => {
+    p.classList.remove('active');
+    if (i === n) p.classList.add('active');
+  });
+  document.getElementById('step-label').textContent = `Étape ${n+1} / 4 — ${stepLabels[n]}`;
+  state.currentStep = n;
+  document.getElementById('result-section').classList.remove('visible');
+}
+
+function nextStep(current) {
+  const fields = ['escc','radio','stability','surgery'];
+  const warnId = 'warn-' + current;
+  if (!state[fields[current]]) {
+    document.getElementById(warnId).classList.add('visible');
+    return;
+  }
+  document.getElementById(warnId).classList.remove('visible');
+  // Mark pillar done
+  document.getElementById('check-' + current).textContent = '✓';
+  document.querySelectorAll('.pillar')[current].classList.add('done');
+  goStep(current + 1);
+}
+
+function selectCard(el, group) {
+  el.closest('.section-panel').querySelectorAll(`.choice-card[data-group="${group}"]`)
+    .forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[group] = el.dataset.val;
+  // Clear warning
+  const panel = el.closest('.section-panel');
+  const panelId = panel.id.replace('panel-','');
+  const warn = document.getElementById('warn-' + panelId);
+  if (warn) warn.classList.remove('visible');
+}
+
+function selectMech(raw) {
+  state.stabilityRaw = raw;
+  // For NOMS: indeterminate → treated as stable
+  state.stability = (raw === 'unstable') ? 'unstable' : 'stable';
+  // Update cards visual
+  ['mc-stable','mc-indet','mc-unstable'].forEach(id => {
+    document.getElementById(id).classList.remove('selected');
+  });
+  const map = { stable:'mc-stable', indeterminate:'mc-indet', unstable:'mc-unstable' };
+  document.getElementById(map[raw]).classList.add('selected');
+  document.getElementById('warn-2').classList.remove('visible');
+}
+
+function updateSINS(val) {
+  const v = parseInt(val);
+  state.sins = isNaN(v) ? null : Math.max(0, Math.min(18, v));
+  const interp = document.getElementById('sins-interp');
+  if (state.sins === null) { interp.textContent = ''; return; }
+  if (v < 0 || v > 18) { interp.textContent = 'Valeur hors plage (0–18)'; return; }
+  // Auto-select card
+  if (v <= 6) selectMech('stable');
+  else if (v <= 12) selectMech('indeterminate');
+  else selectMech('unstable');
+
+  const stab = v <= 6 ? 'Stable' : v <= 12 ? 'Indéterminé (→ traité comme stable)' : 'Instable';
+  const col = v <= 6 ? 'var(--m-color)' : v <= 12 ? 'var(--o-color)' : 'var(--surgery)';
+  interp.innerHTML = `SINS <strong style="color:${col}">${v}/18</strong> · <span style="color:${col}">${stab}</span>`;
+}
+
+function computeNOMS() {
+  if (!state.surgery) {
+    document.getElementById('warn-3').classList.add('visible');
+    return;
+  }
+  document.getElementById('warn-3').classList.remove('visible');
+  document.getElementById('check-3').textContent = '✓';
+  document.querySelectorAll('.pillar')[3].classList.add('done');
+
+  const { escc, radio, stability, stabilityRaw, surgery, sins } = state;
+
+  let decision = '';
+  let decisionClass = '';
+  let rationale = '';
+  let tags = [];
+
+  // Core NOMS logic
+  const isHighESCC = escc === 'high';
+  const isRR = radio === 'resistant';
+  const isUnstable = stability === 'unstable';
+  const canSurgery = surgery === 'yes';
+
+  if (!isHighESCC) {
+    // Low-grade ESCC (including 1c in simplified view)
+    if (!isRR) {
+      if (!isUnstable) {
+        decision = 'cEBRT';
+        decisionClass = 'decision-cebrt';
+        rationale = 'ESCC bas grade avec tumeur radiosensible et rachis stable : la radiothérapie conventionnelle (cEBRT) est le traitement de première intention. Elle assure un contrôle local satisfaisant et un soulagement symptomatique sans nécessiter d\'intervention chirurgicale.';
+        tags = ['cebrt'];
+      } else {
+        decision = 'Stabilisation puis cEBRT';
+        decisionClass = 'decision-mixed';
+        rationale = 'Tumeur radiosensible mais instabilité rachidienne : la stabilisation chirurgicale (ciment percutané, vissage percutané ou chirurgie ouverte) doit précéder la radiothérapie conventionnelle. La radiation seule ne restaure pas la stabilité mécanique.';
+        tags = ['stabilize','cebrt'];
+      }
+    } else {
+      // Radioresistant
+      if (!isUnstable) {
+        decision = 'SRS / Radiochirurgie';
+        decisionClass = 'decision-srs';
+        rationale = 'ESCC bas grade avec tumeur radiorésistante et rachis stable : la stéréotaxie rachidienne (SRS/SBRT) est indiquée. Les données montrent un contrôle local > 85% quelle que soit l\'histologie. La dose unique de 24 Gy atteint < 3% de récidive à 3 ans. La chirurgie de décompression n\'est pas nécessaire.';
+        tags = ['srs'];
+      } else {
+        decision = 'Stabilisation puis SRS';
+        decisionClass = 'decision-mixed';
+        rationale = 'Tumeur radiorésistante avec instabilité rachidienne, mais sans compression médullaire haute grade : la stabilisation chirurgicale est indiquée pour l\'instabilité mécanique, suivie de SRS pour le contrôle tumoral local. Pas de décompression nécessaire sur le plan neurologique.';
+        tags = ['stabilize','srs'];
+      }
+    }
+  } else {
+    // High-grade ESCC ± myelopathy
+    if (!isRR) {
+      if (!isUnstable) {
+        decision = 'cEBRT';
+        decisionClass = 'decision-cebrt';
+        rationale = 'Compression médullaire haut grade (grade 2–3) mais tumeur radiosensible : la cEBRT reste le traitement de référence. Les tumeurs radiosensibles (lymphome, myélome, sein, prostate…) répondent à la cEBRT même en cas de compression médullaire, avec décompression tumorale par mort mitotique. La chirurgie peut être évitée. Les dexaméthasones à forte dose doivent être initiées en urgence.';
+        tags = ['cebrt'];
+      } else {
+        decision = 'Stabilisation puis cEBRT';
+        decisionClass = 'decision-mixed';
+        rationale = 'Compression médullaire haut grade avec tumeur radiosensible ET instabilité rachidienne : la stabilisation chirurgicale est nécessaire pour l\'instabilité mécanique, puis cEBRT. La décompression chirurgicale neurologique n\'est pas obligatoire si la tumeur est radiosensible.';
+        tags = ['stabilize','cebrt'];
+      }
+    } else {
+      // Radioresistant + high-grade ESCC
+      if (!isUnstable) {
+        if (canSurgery) {
+          decision = 'Chirurgie de séparation + SRS';
+          decisionClass = 'decision-surgery';
+          rationale = 'Compression médullaire haut grade avec tumeur radiorésistante chez un patient opérable : la chirurgie de séparation (separation surgery) est indiquée pour créer un intervalle de 2 mm entre la tumeur et la moelle, permettant de délivrer 15–24 Gy en SRS sans toxicité médullaire. Le contrôle local à 1 an est de 90–96% après cette approche combinée. La résection complète n\'est pas l\'objectif.';
+          tags = ['surgery','srs'];
+        } else {
+          decision = 'cEBRT';
+          decisionClass = 'decision-cebrt';
+          rationale = 'Compression médullaire haut grade avec tumeur radiorésistante mais patient non opérable : la cEBRT est administrée malgré la radiorésistance relative de la tumeur. Elle offre une palliation neurologique et antalgique, bien que le contrôle local soit inférieur à celui obtenu avec la chirurgie + SRS. Les dexaméthasones à forte dose sont indiquées en urgence.';
+          tags = ['cebrt'];
+        }
+      } else {
+        if (canSurgery) {
+          decision = 'Décompression + stabilisation puis SRS';
+          decisionClass = 'decision-surgery';
+          rationale = 'Situation la plus complexe : compression médullaire haut grade + tumeur radiorésistante + instabilité rachidienne chez un patient opérable. La chirurgie répond aux deux indications (décompression et stabilisation), suivie de SRS pour le contrôle tumoral. Cette combinaison représente l\'approche optimale pour la récupération neurologique et le contrôle local à long terme.';
+          tags = ['surgery','stabilize','srs'];
+        } else {
+          decision = 'Stabilisation puis cEBRT';
+          decisionClass = 'decision-mixed';
+          rationale = 'Compression médullaire haut grade + tumeur radiorésistante + instabilité rachidienne chez un patient non opérable : la stabilisation percutanée (ciment ± vis percutanées) est préférée à la chirurgie ouverte, suivie de cEBRT. Cette approche minimise la morbidité tout en traitant l\'instabilité et en offrant une palliation neurologique.';
+          tags = ['stabilize','cebrt'];
+        }
+      }
+    }
+  }
+
+  // Render result
+  document.getElementById('res-decision').textContent = decision;
+  document.getElementById('res-decision').className = 'result-decision ' + decisionClass;
+  document.getElementById('res-rationale').textContent = rationale;
+
+  const tagColors = { cebrt:'dtag-cebrt', srs:'dtag-srs', surgery:'dtag-surgery', stabilize:'dtag-stabilize' };
+  const tagLabels = { cebrt:'cEBRT', srs:'SRS / SBRT', surgery:'Chirurgie de séparation', stabilize:'Stabilisation' };
+  const tagsEl = document.getElementById('res-tags');
+  tagsEl.innerHTML = tags.map(t => `<span class="dtag ${tagColors[t]}">${tagLabels[t]}</span>`).join('');
+
+  // Summary
+  const esccLabels = { low:'ESCC 0–1b · Bas grade', '1c':'ESCC 1c · Borderline', high:'ESCC 2–3 · Haut grade ± myélopathie' };
+  const radioLabels = { sensitive:'Radiosensible', resistant:'Radiorésistant' };
+  const stabLabels = { stable:'Stable (SINS 0–6)', indeterminate:'Indéterminé (SINS 7–12)', unstable:'Instable (SINS 13–18)' };
+  const surgLabels = { yes:'Candidat à la chirurgie', no:'Non-candidat' };
+
+  document.getElementById('sum-n').textContent = esccLabels[escc];
+  document.getElementById('sum-n-note').textContent = '';
+  document.getElementById('sum-o').textContent = radioLabels[radio];
+  document.getElementById('sum-o-note').textContent = radio === 'resistant' ? 'Nécessite SRS pour contrôle local' : 'cEBRT efficace';
+  document.getElementById('sum-m').textContent = stabLabels[stabilityRaw || stability];
+  document.getElementById('sum-m-note').textContent = sins !== null ? `SINS = ${sins}/18` : '';
+  if (stabilityRaw === 'indeterminate') document.getElementById('sum-m-note').textContent += ' · Traité comme stable';
+  document.getElementById('sum-s').textContent = surgLabels[surgery];
+  document.getElementById('sum-s-note').textContent = isUnstable || (isHighESCC && isRR) ? 'Paramètre déterminant' : 'Non déterminant ici';
+
+  document.getElementById('result-section').classList.add('visible');
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetAll() {
+  state.escc = null; state.radio = null; state.stability = null;
+  state.stabilityRaw = null; state.surgery = null; state.sins = null;
+  document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.pillar').forEach(p => { p.classList.remove('done','active'); });
+  document.querySelectorAll('.pillar-check').forEach(c => c.textContent = '');
+  document.querySelectorAll('.warn-msg').forEach(w => w.classList.remove('visible'));
+  document.getElementById('sins-input').value = '';
+  document.getElementById('sins-interp').textContent = '';
+  document.getElementById('result-section').classList.remove('visible');
+  goStep(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+goStep(0);
+</script>
+</body>
+</html>
