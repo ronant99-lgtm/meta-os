@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rades 2008 – Statut Ambulatoire post-RT · MSCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f4f0f8;
+    --accent: #5b2d8e;
+    --accent-light: #8e44ad;
+    --muted: #7f8c8d;
+    --border: #cfc4dc;
+    --card-bg: #faf8fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(91,45,142,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(26,26,46,0.04) 0%, transparent 60%);
+  }
+
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    background: var(--card-bg);
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  .alert-banner {
+    background: rgba(91,45,142,0.07);
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-style: italic;
+    margin-top: 0.6rem;
+  }
+
+  .ref-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+    flex-shrink: 0;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .full { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--muted); }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .score-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink);
+    opacity: 0.12;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .score-badge.active { opacity: 1; color: var(--accent); }
+
+  .options { display: flex; flex-direction: column; gap: 0.45rem; }
+
+  label.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  label.option:hover {
+    background: rgba(91,45,142,0.04);
+    border-color: var(--border);
+  }
+
+  label.option input[type="radio"] {
+    margin-top: 0.15rem;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+
+  label.option:has(input:checked) {
+    background: rgba(91,45,142,0.06);
+    border-color: rgba(91,45,142,0.28);
+  }
+
+  label.option input[type="radio"]:checked + .option-content { color: var(--accent); }
+
+  .option-content { flex: 1; }
+  .option-label { display: block; }
+
+  .option-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .option-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.12rem;
+    line-height: 1.35;
+  }
+
+  /* Running score */
+  .running-score-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .running-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .running-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent);
+    min-width: 3rem;
+  }
+
+  .running-range {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(91,45,142,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Result panel */
+  #result-panel {
+    background: var(--ink);
+    color: #f5f0e8;
+    border-radius: 2px;
+    padding: 2rem 2.5rem;
+    margin-top: 1.2rem;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+
+  #result-panel.visible { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .score-display { text-align: center; flex-shrink: 0; }
+
+  .score-number {
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .score-denom {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 0.2rem;
+  }
+
+  .risk-info { flex: 1; }
+
+  .risk-label-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .risk-name {
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1.2;
+  }
+
+  .risk-name.gA { color: #e74c3c; }
+  .risk-name.gB { color: #e67e22; }
+  .risk-name.gC { color: #f1c40f; }
+  .risk-name.gD { color: #3498db; }
+  .risk-name.gE { color: #2ecc71; }
+
+  .risk-sub {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.65;
+    font-style: italic;
+  }
+
+  /* Big ambulatory rate display */
+  .ambul-display {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .ambul-box {
+    flex: 1;
+    min-width: 130px;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .ambul-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.8rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .ambul-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-top: 0.4rem;
+  }
+
+  .ambul-bar-wrap {
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin-top: 0.6rem;
+    overflow: hidden;
+  }
+
+  .ambul-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.9s ease;
+  }
+
+  .bar-gA { background: #e74c3c; }
+  .bar-gB { background: #e67e22; }
+  .bar-gC { background: #f1c40f; }
+  .bar-gD { background: #3498db; }
+  .bar-gE { background: #2ecc71; }
+
+  /* Survival rates */
+  .survival-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+
+  .survival-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    padding: 0.4rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .survival-table th:first-child { text-align: left; }
+
+  .survival-table td {
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .survival-table td:first-child {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+
+  .mini-bar-wrap {
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin-top: 0.3rem;
+    overflow: hidden;
+  }
+
+  .mini-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  /* Recommendation */
+  .rt-recommendation {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid rgba(255,255,255,0.3);
+    border-radius: 0 2px 2px 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  .rt-recommendation strong {
+    font-style: normal;
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.5;
+  }
+
+  /* Buttons */
+  .btn-wrap { text-align: center; margin: 1.8rem 0 0; }
+
+  button#calculate {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    background: var(--ink);
+    color: #f5f0e8;
+    border: none;
+    padding: 0.8rem 3rem;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(26,26,46,0.2);
+  }
+
+  button#calculate:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(91,45,142,0.3);
+  }
+
+  button#calculate:active { transform: translateY(0); }
+
+  .btn-reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: 1rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .btn-reset:hover { color: rgba(255,255,255,0.8); }
+
+  .disclaimer {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    opacity: 0.45;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  #warning {
+    display: none;
+    background: rgba(91,45,142,0.08);
+    border: 1px solid rgba(91,45,142,0.3);
+    border-radius: 2px;
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  #warning.visible { display: block; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .ref-badge { margin-left: 0; }
+    h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-label">Score pronostique · Compression médullaire métastatique</div>
+    <h1>Score de <em>Rades</em> – Statut ambulatoire post-RT</h1>
+    <p class="subtitle">Prédiction du statut ambulatoire après radiothérapie pour compression médullaire métastatique (MSCC)</p>
+    <div class="alert-banner">⚠ Score distinct du score de survie MESCC — prédit la récupération motrice, non la survie</div>
+  </div>
+  <div class="ref-badge">
+    Rades et al., <i>Int J Radiat Oncol Biol Phys</i> 2008;72:905–908<br>
+    n = 2096 patients · Analyse multivariée rétrospective
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- 1. Type histologique -->
+    <div class="card full">
+      <span class="card-num">01 / FACTEUR PRONOSTIQUE</span>
+      <h2>Type histologique de la tumeur primitive</h2>
+      <span class="score-badge" id="badge-tumor">—</span>
+      <div class="options" style="display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;">
+        <label class="option">
+          <input type="radio" name="tumor" value="9">
+          <div class="option-content">
+            <span class="option-label">Myélome / Lymphome</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 89%</span>
+          </div>
+          <span class="option-pts">9 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="8">
+          <div class="option-content">
+            <span class="option-label">Sein</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 81%</span>
+          </div>
+          <span class="option-pts">8 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="7">
+          <div class="option-content">
+            <span class="option-label">Prostate</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 68%</span>
+          </div>
+          <span class="option-pts">7 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Cancer à petites cellules (poumon)</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 64%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Carcinome rénal</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 62%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Colorectal</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 64%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Autres tumeurs</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 59%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="5">
+          <div class="option-content">
+            <span class="option-label">Cancer non à petites cellules (poumon)</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 54%</span>
+          </div>
+          <span class="option-pts">5 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="5">
+          <div class="option-content">
+            <span class="option-label">Primitif inconnu</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 45%</span>
+          </div>
+          <span class="option-pts">5 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 2. Délai diagnostic → MSCC -->
+    <div class="card">
+      <span class="card-num">02 / FACTEUR PRONOSTIQUE</span>
+      <h2>Délai entre diagnostic et MSCC</h2>
+      <span class="score-badge" id="badge-interval">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="interval" value="8">
+          <div class="option-content">
+            <span class="option-label">> 15 mois</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 78%</span>
+          </div>
+          <span class="option-pts">8 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="interval" value="6">
+          <div class="option-content">
+            <span class="option-label">≤ 15 mois</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 58%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. Métastases viscérales -->
+    <div class="card">
+      <span class="card-num">03 / FACTEUR PRONOSTIQUE</span>
+      <h2>Métastases viscérales au moment de la RT</h2>
+      <span class="score-badge" id="badge-visceral">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="visceral" value="8">
+          <div class="option-content">
+            <span class="option-label">Absentes</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 77%</span>
+          </div>
+          <span class="option-pts">8 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="visceral" value="5">
+          <div class="option-content">
+            <span class="option-label">Présentes</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 54%</span>
+          </div>
+          <span class="option-pts">5 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 4. Fonction motrice avant RT -->
+    <div class="card">
+      <span class="card-num">04 / FACTEUR PRONOSTIQUE</span>
+      <h2>Fonction motrice avant la RT</h2>
+      <span class="score-badge" id="badge-motor">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="motor" value="10">
+          <div class="option-content">
+            <span class="option-label">Ambulatoire sans aide</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 98%</span>
+          </div>
+          <span class="option-pts">10 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="motor" value="9">
+          <div class="option-content">
+            <span class="option-label">Ambulatoire avec aide</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 89%</span>
+          </div>
+          <span class="option-pts">9 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="motor" value="3">
+          <div class="option-content">
+            <span class="option-label">Non ambulatoire</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 28%</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="motor" value="1">
+          <div class="option-content">
+            <span class="option-label">Paraplégique</span>
+            <span class="option-sub">Taux ambulatoire post-RT : 7%</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 5. Délai de développement des déficits -->
+    <div class="card">
+      <span class="card-num">05 / FACTEUR PRONOSTIQUE</span>
+      <h2>Délai d'installation des déficits moteurs avant RT</h2>
+      <span class="score-badge" id="badge-onset">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="onset" value="9">
+          <div class="option-content">
+            <span class="option-label">> 14 jours</span>
+            <span class="option-sub">Installation lente · Taux ambulatoire post-RT : 88%</span>
+          </div>
+          <span class="option-pts">9 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="onset" value="7">
+          <div class="option-content">
+            <span class="option-label">8–14 jours</span>
+            <span class="option-sub">Installation intermédiaire · Taux ambulatoire post-RT : 69%</span>
+          </div>
+          <span class="option-pts">7 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="onset" value="4">
+          <div class="option-content">
+            <span class="option-label">1–7 jours</span>
+            <span class="option-sub">Installation rapide · Taux ambulatoire post-RT : 37%</span>
+          </div>
+          <span class="option-pts">4 pts</span>
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- Running score -->
+  <div class="running-score-bar">
+    <div>
+      <div class="running-label">Score en cours</div>
+      <div class="running-range">Plage : 21–44 pts</div>
+    </div>
+    <div class="running-val" id="running-val">—</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div id="warning">⚠ Veuillez renseigner tous les critères avant de calculer le score.</div>
+
+  <div class="btn-wrap">
+    <button id="calculate">Calculer le score →</button>
+  </div>
+
+  <!-- Result panel -->
+  <div id="result-panel">
+    <div class="result-header">
+      <div class="score-display">
+        <div class="score-number" id="res-score">—</div>
+        <div class="score-denom">/ 44</div>
+      </div>
+      <div class="risk-info">
+        <div class="risk-label-tag">Groupe pronostique</div>
+        <div class="risk-name" id="res-risk">—</div>
+        <div class="risk-sub" id="res-sub">—</div>
+      </div>
+    </div>
+
+    <!-- Ambulatory rate big display -->
+    <div class="ambul-display" id="ambul-display"></div>
+
+    <!-- Survival rates -->
+    <table class="survival-table">
+      <thead>
+        <tr>
+          <th>Survie</th>
+          <th>3 mois</th>
+          <th>6 mois</th>
+        </tr>
+      </thead>
+      <tbody id="survival-rows"></tbody>
+    </table>
+
+    <div class="rt-recommendation">
+      <strong>Recommandation (Rades et al. 2008)</strong>
+      <span id="rt-text"></span>
+    </div>
+
+    <p class="disclaimer">
+      Données issues de Rades et al. Int J Radiat Oncol Biol Phys 2008 (n=2096).<br>
+      Ce score prédit le <strong>statut ambulatoire</strong> post-RT, et non la survie.<br>
+      Outil d'aide à la décision — ne se substitue pas au jugement clinique.
+    </p>
+
+    <div style="text-align:right;margin-top:1rem;">
+      <button class="btn-reset" id="reset-btn">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Rades 2008 · Score Statut Ambulatoire post-RT · MSCC</span>
+  <span>Rades et al., <i>Int J Radiat Oncol Biol Phys</i> 2008;72:905–908</span>
+</footer>
+
+<script>
+  const groups = {
+    gA: {
+      label: 'Groupe A · Score ≤ 28', labelClass: 'gA', barClass: 'bar-gA',
+      points: '≤ 28',
+      ambul: 6, s3: 29, s6: 6,
+      rt: 'Pronostic fonctionnel et vital très sévère. Le taux de récupération ambulatoire après RT seule est de seulement 6%, avec une survie médiane de 2 mois. RT courte durée antalgique ou soins de support peuvent être envisagés. La chirurgie décompressive est à discuter mais le bénéfice reste incertain compte tenu de la survie très limitée (critère d\'exclusion de l\'essai Patchell < 3 mois).'
+    },
+    gB: {
+      label: 'Groupe B · Score 29–31', labelClass: 'gB', barClass: 'bar-gB',
+      points: '29–31',
+      ambul: 44, s3: 62, s6: 31,
+      rt: 'Résultats suboptimaux avec RT seule (44% d\'ambulation post-RT). Ces patients devraient être discutés en RCP neurochirurgicale : la chirurgie décompressive suivie de RT (essai Patchell) peut améliorer le pronostic fonctionnel. La majorité des patients survit ≥ 3 mois, ce qui justifie d\'envisager une intervention.'
+    },
+    gC: {
+      label: 'Groupe C · Score 32–34', labelClass: 'gC', barClass: 'bar-gC',
+      points: '32–34',
+      ambul: 70, s3: 77, s6: 42,
+      rt: 'Résultats intermédiaires avec RT seule (70% d\'ambulation post-RT). Discussion chirurgicale recommandée selon le contexte clinique. Ces patients bénéficient potentiellement d\'une décompression chirurgicale + RT pour optimiser le résultat fonctionnel.'
+    },
+    gD: {
+      label: 'Groupe D · Score 35–37', labelClass: 'gD', barClass: 'bar-gD',
+      points: '35–37',
+      ambul: 86, s3: 84, s6: 61,
+      rt: 'Bons résultats avec RT seule (86% d\'ambulation post-RT). La chirurgie décompressive peut être discutée pour optimiser davantage le résultat fonctionnel. RT longue durée à envisager compte tenu du pronostic favorable.'
+    },
+    gE: {
+      label: 'Groupe E · Score ≥ 38', labelClass: 'gE', barClass: 'bar-gE',
+      points: '≥ 38',
+      ambul: 99, s3: 98, s6: 93,
+      rt: 'Excellent pronostic fonctionnel avec RT seule (99% d\'ambulation post-RT), supérieur au bras chirurgie + RT de l\'essai Patchell (84%). RT longue durée recommandée (10 × 3 Gy ou plus). La chirurgie n\'apporte pas de bénéfice supplémentaire dans ce groupe et expose inutilement aux risques péri-opératoires.'
+    }
+  };
+
+  const fields = ['tumor', 'interval', 'visceral', 'motor', 'onset'];
+  const badges = {
+    tumor: document.getElementById('badge-tumor'),
+    interval: document.getElementById('badge-interval'),
+    visceral: document.getElementById('badge-visceral'),
+    motor: document.getElementById('badge-motor'),
+    onset: document.getElementById('badge-onset'),
+  };
+
+  function updateRunning() {
+    let partial = 0, filled = 0;
+    fields.forEach(f => {
+      const c = document.querySelector(`input[name="${f}"]:checked`);
+      if (c) { partial += parseInt(c.value); filled++; }
+    });
+    const rv = document.getElementById('running-val');
+    const pf = document.getElementById('progress-fill');
+    if (filled === 0) { rv.textContent = '—'; pf.style.width = '0%'; }
+    else {
+      rv.textContent = partial + ' pts';
+      pf.style.width = Math.min(100, ((partial - 21) / (44 - 21)) * 100) + '%';
+    }
+  }
+
+  fields.forEach(f => {
+    document.querySelectorAll(`input[name="${f}"]`).forEach(r => {
+      r.addEventListener('change', () => {
+        const v = parseInt(r.value);
+        badges[f].textContent = v + ' pt' + (v > 1 ? 's' : '');
+        badges[f].classList.add('active');
+        updateRunning();
+      });
+    });
+  });
+
+  document.getElementById('calculate').addEventListener('click', () => {
+    let total = 0, allFilled = true;
+    fields.forEach(f => {
+      const c = document.querySelector(`input[name="${f}"]:checked`);
+      if (!c) allFilled = false;
+      else total += parseInt(c.value);
+    });
+
+    const warning = document.getElementById('warning');
+    const panel = document.getElementById('result-panel');
+
+    if (!allFilled) {
+      warning.classList.add('visible');
+      panel.classList.remove('visible');
+      return;
+    }
+    warning.classList.remove('visible');
+
+    let group;
+    if (total <= 28) group = groups.gA;
+    else if (total <= 31) group = groups.gB;
+    else if (total <= 34) group = groups.gC;
+    else if (total <= 37) group = groups.gD;
+    else group = groups.gE;
+
+    document.getElementById('res-score').textContent = total;
+    const riskEl = document.getElementById('res-risk');
+    riskEl.textContent = group.label;
+    riskEl.className = 'risk-name ' + group.labelClass;
+    document.getElementById('res-sub').textContent =
+      `Score ${group.points} · Survie à 3 mois : ${group.s3}% · à 6 mois : ${group.s6}%`;
+
+    // Ambulatory display
+    const ad = document.getElementById('ambul-display');
+    ad.innerHTML = `
+      <div class="ambul-box" style="flex:2;min-width:200px;">
+        <div class="ambul-val" style="color:${group.labelClass === 'gA' ? '#e74c3c' : group.labelClass === 'gB' ? '#e67e22' : group.labelClass === 'gC' ? '#f1c40f' : group.labelClass === 'gD' ? '#3498db' : '#2ecc71'}">${group.ambul}%</div>
+        <div class="ambul-label">Taux ambulatoire post-RT</div>
+        <div class="ambul-bar-wrap">
+          <div class="ambul-bar ${group.barClass}" style="width:${group.ambul}%"></div>
+        </div>
+      </div>
+      <div class="ambul-box">
+        <div class="ambul-val">${group.s3}%</div>
+        <div class="ambul-label">Survie à 3 mois</div>
+        <div class="ambul-bar-wrap">
+          <div class="ambul-bar ${group.barClass}" style="width:${group.s3}%"></div>
+        </div>
+      </div>
+      <div class="ambul-box">
+        <div class="ambul-val">${group.s6}%</div>
+        <div class="ambul-label">Survie à 6 mois</div>
+        <div class="ambul-bar-wrap">
+          <div class="ambul-bar ${group.barClass}" style="width:${group.s6}%"></div>
+        </div>
+      </div>
+    `;
+
+    // Survival table (minimal, already shown above)
+    document.getElementById('survival-rows').innerHTML = '';
+
+    document.getElementById('rt-text').textContent = group.rt;
+
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    fields.forEach(f => {
+      document.querySelectorAll(`input[name="${f}"]`).forEach(r => r.checked = false);
+      badges[f].textContent = '—';
+      badges[f].classList.remove('active');
+    });
+    document.getElementById('running-val').textContent = '—';
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('result-panel').classList.remove('visible');
+    document.getElementById('warning').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
