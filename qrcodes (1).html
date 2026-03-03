@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Codes - Metastases rachidiennes</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--ink:#1a1a2e;--paper:#f5f0e8;--border:#d4cfc5;--card-bg:#fdfaf4;--muted:#7f8c8d;--katagiri:#c0392b;--rades-os:#1a5276;--rades-mescc:#6c3483;--rades-amb:#7d3c98;--sins:#7d5a1e;--noms:#1a6b4a;--mnop:#154360;--mayo:#922b21;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem 1.5rem 5rem;background-image:radial-gradient(ellipse at 15% 10%,rgba(192,57,43,.04) 0%,transparent 55%),radial-gradient(ellipse at 85% 90%,rgba(26,82,118,.04) 0%,transparent 55%);}
+header{text-align:center;margin-bottom:3rem;max-width:860px;}
+.header-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+h1{font-size:2rem;font-weight:300;letter-spacing:-.01em;line-height:1.2;}
+.subtitle{font-size:.95rem;color:var(--muted);font-style:italic;margin-top:.4rem;}
+.section-title{width:100%;max-width:900px;margin:2.5rem 0 1.1rem;display:flex;align-items:center;gap:1rem;}
+.section-title span{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.cards{display:grid;gap:1.4rem;width:100%;max-width:900px;}
+.g2{grid-template-columns:repeat(2,1fr);max-width:600px;}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g1c{grid-template-columns:280px;justify-content:center;}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:3px;padding:1.5rem 1.3rem 1.3rem;display:flex;flex-direction:column;align-items:center;gap:.9rem;box-shadow:0 2px 14px rgba(26,26,46,.06);position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.card.katagiri::before{background:var(--katagiri);}
+.card.rades-os::before{background:var(--rades-os);}
+.card.rades-mescc::before{background:var(--rades-mescc);}
+.card.rades-amb::before{background:var(--rades-amb);}
+.card.sins::before{background:var(--sins);}
+.card.noms::before{background:var(--noms);}
+.card.mnop::before{background:var(--mnop);}
+.card.mayo::before{background:var(--mayo);}
+.card-label{font-family:'JetBrains Mono',monospace;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;align-self:flex-start;}
+.card.katagiri .card-label{color:var(--katagiri);}
+.card.rades-os .card-label{color:var(--rades-os);}
+.card.rades-mescc .card-label{color:var(--rades-mescc);}
+.card.rades-amb .card-label{color:var(--rades-amb);}
+.card.sins .card-label{color:var(--sins);}
+.card.noms .card-label{color:var(--noms);}
+.card.mnop .card-label{color:var(--mnop);}
+.card.mayo .card-label{color:var(--mayo);}
+h2{font-size:1rem;font-weight:600;line-height:1.25;text-align:center;}
+.card-desc{font-size:.74rem;color:var(--muted);font-style:italic;text-align:center;line-height:1.5;}
+.qr-wrap{padding:.5rem;background:#fff;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;}
+.url-tag{font-family:'JetBrains Mono',monospace;font-size:.52rem;color:var(--muted);text-align:center;line-height:1.6;word-break:break-all;}
+.ext-badge{font-family:'JetBrains Mono',monospace;font-size:.54rem;padding:.15rem .45rem;border-radius:2px;border:1px solid var(--mayo);color:var(--mayo);letter-spacing:.1em;text-transform:uppercase;}
+footer{margin-top:3.5rem;text-align:center;font-size:.78rem;color:var(--muted);font-style:italic;line-height:1.7;border-top:1px solid var(--border);padding-top:1.5rem;width:100%;max-width:900px;}
+@media(max-width:720px){.g3{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:460px){.g2,.g3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-label">Radioth&eacute;rapie &middot; M&eacute;tastases rachidiennes &middot; Scores &amp; Frameworks d&eacute;cisionnels</div>
+  <h1>Scores pronostiques &amp; Outils d&eacute;cisionnels</h1>
+  <p class="subtitle">Calculateurs en ligne &middot; Scannez pour acc&eacute;der directement</p>
+</header>
+
+<div class="section-title"><span>Scores de survie &middot; M&eacute;tastases osseuses</span></div>
+<div class="cards g2">
+  <div class="card katagiri">
+    <div class="card-label">Survie &middot; M&eacute;ta. osseuses</div>
+    <h2>Katagiri Score</h2>
+    <p class="card-desc">Survie &agrave; 6 et 12 mois apr&egrave;s RT &middot; Katagiri et al. 2014</p>
+    <div class="qr-wrap"><div id="qr-katagiri"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>katagiri-calculator.html</div>
+  </div>
+  <div class="card rades-os">
+    <div class="card-label">Survie &middot; M&eacute;ta. osseuses</div>
+    <h2>Rades 2019</h2>
+    <p class="card-desc">Score de survie pour m&eacute;tastases osseuses hors MSCC &middot; Rades et al. 2019</p>
+    <div class="qr-wrap"><div id="qr-rades"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>rades-calculator.html</div>
+  </div>
+</div>
+
+<div class="section-title"><span>Compression m&eacute;dullaire &eacute;pidurale (MSCC)</span></div>
+<div class="cards g2">
+  <div class="card rades-mescc">
+    <div class="card-label">Survie &middot; MSCC &middot; RT seule</div>
+    <h2>Rades 2022 MESCC</h2>
+    <p class="card-desc">Survie &agrave; 6 et 12 mois apr&egrave;s RT seule pour MSCC &middot; Rades et al. Pract Radiat Oncol 2022</p>
+    <div class="qr-wrap"><div id="qr-mescc"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>rades-mescc-calculator.html</div>
+  </div>
+  <div class="card rades-amb">
+    <div class="card-label">Statut ambulatoire &middot; MSCC</div>
+    <h2>Rades 2008 Ambulatoire</h2>
+    <p class="card-desc">Pr&eacute;diction du statut ambulatoire post-RT &middot; Aide d&eacute;cision chirurgicale &middot; Rades et al. IJROBP 2008</p>
+    <div class="qr-wrap"><div id="qr-ambulatory"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>rades-ambulatory-calculator.html</div>
+  </div>
+</div>
+
+<div class="section-title"><span>Instabilit&eacute; rachidienne &amp; Frameworks d&eacute;cisionnels</span></div>
+<div class="cards g3">
+  <div class="card sins">
+    <div class="card-label">Instabilit&eacute; rachidienne</div>
+    <h2>SINS</h2>
+    <p class="card-desc">Spine Instability Neoplastic Score &middot; Fisher et al. Spine 2010</p>
+    <div class="qr-wrap"><div id="qr-sins"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>sins-calculator.html</div>
+  </div>
+  <div class="card noms">
+    <div class="card-label">Framework d&eacute;cisionnel</div>
+    <h2>NOMS Framework</h2>
+    <p class="card-desc">Neurologic &middot; Oncologic &middot; Mechanical &middot; Systemic &middot; Laufer et al. Oncologist 2013</p>
+    <div class="qr-wrap"><div id="qr-noms"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>noms-framework.html</div>
+  </div>
+  <div class="card mnop">
+    <div class="card-label">Framework d&eacute;cisionnel</div>
+    <h2>MNOP Framework</h2>
+    <p class="card-desc">Mechanical &middot; Neurological &middot; Oncological &middot; Preferred Tx &middot; Spratt et al. Lancet Oncol 2017</p>
+    <div class="qr-wrap"><div id="qr-mnop"></div></div>
+    <div class="url-tag">ronant99-lgtm.github.io/meta-os/<br>mnop-framework.html</div>
+  </div>
+</div>
+
+<div class="section-title"><span>Ressource externe &middot; Mayo Clinic</span></div>
+<div class="cards g1c">
+  <div class="card mayo">
+    <div class="card-label">Spine SBRT &middot; Scores multiples</div>
+    <h2>Mayo Clinic<br>Spine SBRT Tool</h2>
+    <p class="card-desc">Application multiscore pour m&eacute;tastases rachidiennes trait&eacute;es par SBRT &middot; Survie, contr&ocirc;le local, toxicit&eacute;</p>
+    <div class="ext-badge">Ressource externe</div>
+    <div class="qr-wrap"><div id="qr-mayo"></div></div>
+    <div class="url-tag">radonc-data-science.shinyapps.io/<br>spine_sbrt/</div>
+  </div>
+</div>
+
+<footer>
+  Outils d&eacute;velopp&eacute;s pour usage clinique en radioth&eacute;rapie des m&eacute;tastases rachidiennes.<br>
+  Calculateurs h&eacute;berg&eacute;s sur GitHub Pages &middot; ronant99-lgtm.github.io/meta-os/<br>
+  Mayo Clinic Spine SBRT : ressource externe ind&eacute;pendante.<br>
+  Ces outils sont des aides &agrave; la d&eacute;cision et ne se substituent pas au jugement clinique ni &agrave; la discussion en RCP.
+</footer>
+
+<script>
+var base = 'https://ronant99-lgtm.github.io/meta-os/';
+var tools = [
+  { id: 'qr-katagiri',   url: base + 'katagiri-calculator.html' },
+  { id: 'qr-rades',      url: base + 'rades-calculator.html' },
+  { id: 'qr-mescc',      url: base + 'rades-mescc-calculator.html' },
+  { id: 'qr-ambulatory', url: base + 'rades-ambulatory-calculator.html' },
+  { id: 'qr-sins',       url: base + 'sins-calculator.html' },
+  { id: 'qr-noms',       url: base + 'noms-framework.html' },
+  { id: 'qr-mnop',       url: base + 'mnop-framework.html' },
+  { id: 'qr-mayo',       url: 'https://radonc-data-science.shinyapps.io/spine_sbrt/' }
+];
+tools.forEach(function(t) {
+  new QRCode(document.getElementById(t.id), {
+    text: t.url, width: 130, height: 130,
+    colorDark: '#1a1a2e', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+});
+</script>
+</body>
+</html>
