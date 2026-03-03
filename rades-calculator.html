@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rades Score Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f0f4f8;
+    --accent: #1a5276;
+    --accent-light: #2980b9;
+    --muted: #7f8c8d;
+    --border: #c8d6e0;
+    --card-bg: #f8fbfd;
+    --low: #c0392b;
+    --mid: #e67e22;
+    --high: #27ae60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(26,82,118,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(26,26,46,0.04) 0%, transparent 60%);
+  }
+
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    background: var(--card-bg);
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  .ref-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .full { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--muted); }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .score-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink);
+    opacity: 0.12;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .score-badge.active {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  label.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.55rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  label.option:hover {
+    background: rgba(26,82,118,0.04);
+    border-color: var(--border);
+  }
+
+  label.option input[type="radio"] {
+    margin-top: 0.15rem;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+
+  label.option input[type="radio"]:checked + .option-content {
+    color: var(--accent);
+  }
+
+  label.option:has(input:checked) {
+    background: rgba(26,82,118,0.06);
+    border-color: rgba(26,82,118,0.25);
+  }
+
+  .option-content { flex: 1; }
+  .option-label { display: block; }
+
+  .option-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .option-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.15rem;
+    line-height: 1.35;
+  }
+
+  /* Running score indicator */
+  .running-score-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .running-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .running-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent);
+    min-width: 2.5rem;
+  }
+
+  .running-range {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(26,82,118,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Result panel */
+  #result-panel {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    padding: 2rem 2.5rem;
+    margin-top: 1.2rem;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+
+  #result-panel.visible { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .score-display {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .score-number {
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .score-denom {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 0.2rem;
+  }
+
+  .risk-info { flex: 1; }
+
+  .risk-label-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .risk-name {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .risk-name.A { color: #e74c3c; }
+  .risk-name.B { color: #f39c12; }
+  .risk-name.C { color: #2ecc71; }
+
+  .risk-median {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Survival table */
+  .survival-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .survival-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    padding: 0.4rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .survival-table th:first-child { text-align: left; }
+
+  .survival-table td {
+    padding: 0.7rem 0.8rem;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .survival-table td:first-child {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .survival-bar-wrap {
+    position: relative;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin-top: 0.35rem;
+    overflow: hidden;
+  }
+
+  .survival-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  .bar-A { background: #e74c3c; }
+  .bar-B { background: #f39c12; }
+  .bar-C { background: #2ecc71; }
+
+  .surv-cell { min-width: 80px; }
+
+  /* RT recommendation box */
+  .rt-recommendation {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid rgba(255,255,255,0.3);
+    border-radius: 0 2px 2px 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  .rt-recommendation strong {
+    font-style: normal;
+    opacity: 1;
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.5;
+  }
+
+  /* Calculate button */
+  .btn-wrap {
+    text-align: center;
+    margin: 1.8rem 0 0;
+  }
+
+  button#calculate {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.8rem 3rem;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(26,26,46,0.2);
+  }
+
+  button#calculate:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(26,82,118,0.3);
+  }
+
+  button#calculate:active { transform: translateY(0); }
+
+  .btn-reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: 1rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .btn-reset:hover { color: rgba(255,255,255,0.8); }
+
+  .disclaimer {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    opacity: 0.45;
+    font-style: italic;
+    text-align: center;
+  }
+
+  #warning {
+    display: none;
+    background: rgba(26,82,118,0.08);
+    border: 1px solid rgba(26,82,118,0.3);
+    border-radius: 2px;
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  #warning.visible { display: block; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .ref-badge { margin-left: 0; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-label">Outil pronostique · Métastases osseuses</div>
+    <h1>Score de <em>Rades</em></h1>
+    <p class="subtitle">Estimation de la survie à 12 mois chez les patients irradiés pour métastases osseuses (hors compression médullaire)</p>
+  </div>
+  <div class="ref-badge">
+    Rades et al., <i>BMC Cancer</i> 2019;19:1156<br>
+    n = 445 patients · Lübeck 2009–2017
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- 1. Age -->
+    <div class="card">
+      <span class="card-num">01 / FACTEUR PRONOSTIQUE</span>
+      <h2>Âge au moment de la radiothérapie</h2>
+      <span class="score-badge" id="badge-age">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="age" value="5">
+          <div class="option-content">
+            <span class="option-label">≤ 60 ans</span>
+            <span class="option-sub">Survie à 12 m : 48%</span>
+          </div>
+          <span class="option-pts">5 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="age" value="4">
+          <div class="option-content">
+            <span class="option-label">61–70 ans</span>
+            <span class="option-sub">Survie à 12 m : 44%</span>
+          </div>
+          <span class="option-pts">4 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="age" value="4" id="age-over70">
+          <div class="option-content">
+            <span class="option-label">> 70 ans</span>
+            <span class="option-sub">Survie à 12 m : 38%</span>
+          </div>
+          <span class="option-pts">4 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 2. KPS -->
+    <div class="card">
+      <span class="card-num">02 / FACTEUR PRONOSTIQUE</span>
+      <h2>Karnofsky Performance Status (KPS)</h2>
+      <span class="score-badge" id="badge-kps">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="kps" value="6">
+          <div class="option-content">
+            <span class="option-label">KPS 80–100</span>
+            <span class="option-sub">Autonome, activité normale possible · Survie à 12 m : 55%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="kps" value="2">
+          <div class="option-content">
+            <span class="option-label">KPS ≤ 70</span>
+            <span class="option-sub">Autonomie partielle à dépendance totale · Survie à 12 m : 23%</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. Primary tumor type -->
+    <div class="card full">
+      <span class="card-num">03 / FACTEUR PRONOSTIQUE</span>
+      <h2>Type histologique de la tumeur primitive</h2>
+      <span class="score-badge" id="badge-tumor">—</span>
+      <div class="options" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Sein</span>
+            <span class="option-sub">Survie à 12 m : 64%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="6">
+          <div class="option-content">
+            <span class="option-label">Carcinome rénal</span>
+            <span class="option-sub">Survie à 12 m : 63%</span>
+          </div>
+          <span class="option-pts">6 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="5">
+          <div class="option-content">
+            <span class="option-label">Prostate</span>
+            <span class="option-sub">Survie à 12 m : 52%</span>
+          </div>
+          <span class="option-pts">5 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="3">
+          <div class="option-content">
+            <span class="option-label">Poumon</span>
+            <span class="option-sub">Survie à 12 m : 30%</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="3">
+          <div class="option-content">
+            <span class="option-label">Colorectal</span>
+            <span class="option-sub">Survie à 12 m : 25%</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="tumor" value="2">
+          <div class="option-content">
+            <span class="option-label">Autre tumeur</span>
+            <span class="option-sub">Survie à 12 m : 22%</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- Running score -->
+  <div class="running-score-bar" id="running-bar" style="margin-bottom:1.2rem;">
+    <div>
+      <div class="running-label">Score en cours</div>
+      <div class="running-range">Plage : 8–17 pts</div>
+    </div>
+    <div class="running-val" id="running-val">—</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div id="warning">⚠ Veuillez renseigner tous les critères avant de calculer le score.</div>
+
+  <div class="btn-wrap">
+    <button id="calculate">Calculer le score →</button>
+  </div>
+
+  <!-- Result panel -->
+  <div id="result-panel">
+    <div class="result-header">
+      <div class="score-display">
+        <div class="score-number" id="res-score">—</div>
+        <div class="score-denom">/ 17</div>
+      </div>
+      <div class="risk-info">
+        <div class="risk-label-tag">Groupe pronostique</div>
+        <div class="risk-name" id="res-risk">—</div>
+        <div class="risk-median" id="res-median">—</div>
+      </div>
+    </div>
+
+    <table class="survival-table">
+      <thead>
+        <tr>
+          <th>Horizon</th>
+          <th class="surv-cell">6 mois</th>
+          <th class="surv-cell">12 mois</th>
+          <th class="surv-cell">Médiane</th>
+        </tr>
+      </thead>
+      <tbody id="survival-rows"></tbody>
+    </table>
+
+    <div class="rt-recommendation" id="rt-recommendation">
+      <strong>Recommandation RT (Rades et al. 2019)</strong>
+      <span id="rt-text"></span>
+    </div>
+
+    <p class="disclaimer">Données issues de Rades et al. BMC Cancer 2019 (n=402). Outil d'aide à la décision — ne se substitue pas au jugement clinique. Validé pour les métastases osseuses sans compression médullaire, traitées par RT fractionnée.</p>
+
+    <div style="text-align:right;margin-top:1rem;">
+      <button class="btn-reset" id="reset-btn">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Rades Scoring System · Usage clinique uniquement · Hors compression médullaire</span>
+  <span>Rades et al., <i>BMC Cancer</i> 2019 — Open Access</span>
+</footer>
+
+<script>
+  const groups = {
+    A: {
+      label: 'Groupe A', labelClass: 'A', barClass: 'bar-A',
+      points: '8–9', median: 3,
+      s6: 30, s12: 9,
+      rt: 'Pronostic très sévère (médiane 3 mois). La majorité de ces patients ne survivra pas assez longtemps pour nécessiter une réirradiation. La radiothérapie en fraction unique (1 × 8 Gy) est recommandée.'
+    },
+    B: {
+      label: 'Groupe B', labelClass: 'B', barClass: 'bar-B',
+      points: '10–14', median: 8,
+      s6: 54, s12: 38,
+      rt: 'Pronostic intermédiaire (médiane 8 mois). La RT monofractionnée (1 × 8 Gy) ou courte (5–6 × 4 Gy) peut être envisagée selon la préférence du patient. En cas de douleur récurrente, une 2ème série de RT monofractionnée est possible.'
+    },
+    C: {
+      label: 'Groupe C', labelClass: 'C', barClass: 'bar-C',
+      points: '15–17', median: 24,
+      s6: 85, s12: 72,
+      rt: 'Pronostic favorable (médiane 24 mois). Une RT longue durée (30–40 Gy en 10–20 fractions, ≤ 3 Gy/fraction) est préférable. Pour les métastases spinales, la SBRT peut être envisagée en vue d\'un contrôle local prolongé.'
+    }
+  };
+
+  const fields = ['age', 'kps', 'tumor'];
+  const badges = {
+    age: document.getElementById('badge-age'),
+    kps: document.getElementById('badge-kps'),
+    tumor: document.getElementById('badge-tumor'),
+  };
+
+  function getScore() {
+    let total = 0;
+    let allFilled = true;
+    for (const field of fields) {
+      const checked = document.querySelector(`input[name="${field}"]:checked`);
+      if (!checked) { allFilled = false; }
+      else total += parseInt(checked.value);
+    }
+    return allFilled ? total : null;
+  }
+
+  function updateRunning() {
+    let partial = 0;
+    let filledCount = 0;
+    for (const field of fields) {
+      const checked = document.querySelector(`input[name="${field}"]:checked`);
+      if (checked) { partial += parseInt(checked.value); filledCount++; }
+    }
+    const runVal = document.getElementById('running-val');
+    const fill = document.getElementById('progress-fill');
+    if (filledCount === 0) {
+      runVal.textContent = '—';
+      fill.style.width = '0%';
+    } else {
+      runVal.textContent = partial + ' pts';
+      // score ranges 8-17 → pct based on filled range (min possible = filled fields min, ignore for simplicity use 0-17)
+      fill.style.width = Math.min(100, (partial / 17) * 100) + '%';
+    }
+  }
+
+  fields.forEach(field => {
+    document.querySelectorAll(`input[name="${field}"]`).forEach(radio => {
+      radio.addEventListener('change', () => {
+        const val = parseInt(radio.value);
+        badges[field].textContent = val + ' pt' + (val > 1 ? 's' : '');
+        badges[field].classList.add('active');
+        updateRunning();
+      });
+    });
+  });
+
+  document.getElementById('calculate').addEventListener('click', () => {
+    const total = getScore();
+    const warning = document.getElementById('warning');
+    const panel = document.getElementById('result-panel');
+
+    if (total === null) {
+      warning.classList.add('visible');
+      panel.classList.remove('visible');
+      return;
+    }
+
+    warning.classList.remove('visible');
+
+    let group;
+    if (total <= 9) group = groups.A;
+    else if (total <= 14) group = groups.B;
+    else group = groups.C;
+
+    document.getElementById('res-score').textContent = total;
+    const riskEl = document.getElementById('res-risk');
+    riskEl.textContent = group.label;
+    riskEl.className = 'risk-name ' + group.labelClass;
+    document.getElementById('res-median').textContent =
+      `Survie médiane : ${group.median} mois · Score ${group.points}`;
+
+    const tbody = document.getElementById('survival-rows');
+    tbody.innerHTML = '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>Survie globale</td>
+      <td class="surv-cell">
+        <strong>${group.s6}%</strong>
+        <div class="survival-bar-wrap">
+          <div class="survival-bar ${group.barClass}" style="width:${group.s6}%"></div>
+        </div>
+      </td>
+      <td class="surv-cell">
+        <strong>${group.s12}%</strong>
+        <div class="survival-bar-wrap">
+          <div class="survival-bar ${group.barClass}" style="width:${group.s12}%"></div>
+        </div>
+      </td>
+      <td class="surv-cell">
+        <strong>${group.median} mois</strong>
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    document.getElementById('rt-text').textContent = group.rt;
+
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    fields.forEach(field => {
+      document.querySelectorAll(`input[name="${field}"]`).forEach(r => r.checked = false);
+      badges[field].textContent = '—';
+      badges[field].classList.remove('active');
+    });
+    document.getElementById('running-val').textContent = '—';
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('result-panel').classList.remove('visible');
+    document.getElementById('warning').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>

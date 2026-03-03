@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katagiri Score Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --accent-light: #e74c3c;
+    --muted: #7f8c8d;
+    --border: #d4cfc5;
+    --low: #27ae60;
+    --mid: #e67e22;
+    --high: #c0392b;
+    --card-bg: #fdfaf4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+    background-image: 
+      radial-gradient(ellipse at 10% 10%, rgba(192,57,43,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(26,26,46,0.04) 0%, transparent 60%);
+  }
+
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    background: var(--card-bg);
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  .ref-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .full { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--muted); }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .score-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink);
+    opacity: 0.12;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .score-badge.active {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  label.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.55rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  label.option:hover {
+    background: rgba(192,57,43,0.04);
+    border-color: var(--border);
+  }
+
+  label.option input[type="radio"] {
+    margin-top: 0.15rem;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+
+  label.option input[type="radio"]:checked + .option-content {
+    color: var(--accent);
+  }
+
+  label.option:has(input:checked) {
+    background: rgba(192,57,43,0.06);
+    border-color: rgba(192,57,43,0.25);
+  }
+
+  .option-content { flex: 1; }
+  .option-label { display: block; }
+
+  .option-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .option-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.15rem;
+    line-height: 1.35;
+  }
+
+  /* Result panel */
+  #result-panel {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    padding: 2rem 2.5rem;
+    margin-top: 1.2rem;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+
+  #result-panel.visible { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .score-display {
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .score-number {
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .score-denom {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 0.2rem;
+  }
+
+  .risk-info { flex: 1; }
+
+  .risk-label-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .risk-name {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .risk-name.low { color: #2ecc71; }
+  .risk-name.intermediate { color: #f39c12; }
+  .risk-name.high { color: #e74c3c; }
+
+  .risk-median {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Survival table */
+  .survival-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .survival-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    padding: 0.4rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .survival-table th:first-child { text-align: left; }
+
+  .survival-table td {
+    padding: 0.7rem 0.8rem;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .survival-table td:first-child {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .survival-bar-wrap {
+    position: relative;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin-top: 0.35rem;
+    overflow: hidden;
+  }
+
+  .survival-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  .bar-low { background: #2ecc71; }
+  .bar-intermediate { background: #f39c12; }
+  .bar-high { background: #e74c3c; }
+
+  .surv-cell { min-width: 80px; }
+
+  /* Calculate button */
+  .btn-wrap {
+    text-align: center;
+    margin: 1.8rem 0 0;
+  }
+
+  button#calculate {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.8rem 3rem;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(26,26,46,0.2);
+  }
+
+  button#calculate:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+  }
+
+  button#calculate:active { transform: translateY(0); }
+
+  /* Reset */
+  .btn-reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: 1rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .btn-reset:hover { color: rgba(255,255,255,0.8); }
+
+  .disclaimer {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    opacity: 0.45;
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Incomplete warning */
+  #warning {
+    display: none;
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 2px;
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  #warning.visible { display: block; }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .ref-badge { margin-left: 0; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-label">Outil pronostique · Métastases osseuses</div>
+    <h1>Score de <em>Katagiri</em></h1>
+    <p class="subtitle">Estimation de la survie chez les patients irradiés pour métastases osseuses</p>
+  </div>
+  <div class="ref-badge">
+    Kubota et al., <i>Radiation Oncology</i> 2019;14:13<br>
+    Katagiri et al., <i>Cancer Med</i> 2014;3:1359–67
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- 1. Primary characteristics -->
+    <div class="card full">
+      <span class="card-num">01 / FACTEUR PRONOSTIQUE</span>
+      <h2>Caractéristiques de la tumeur primitive</h2>
+      <span class="score-badge" id="badge-primary">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="primary" value="0">
+          <div class="option-content">
+            <span class="option-label">Lente <span style="font-weight:300;font-style:italic">· Slow</span></span>
+            <span class="option-sub">Cancer du sein, prostate, thyroïde · Myélome multiple · Lymphome malin</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="primary" value="2">
+          <div class="option-content">
+            <span class="option-label">Modérée <span style="font-weight:300;font-style:italic">· Moderate</span></span>
+            <span class="option-sub">Carcinome rénal · Cancer de l'endomètre, ovaire · Sarcome · Autres</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="primary" value="3">
+          <div class="option-content">
+            <span class="option-label">Rapide <span style="font-weight:300;font-style:italic">· Rapid</span></span>
+            <span class="option-sub">Poumon · Colorectal · Gastrique · Pancréas · Tête et cou · Œsophage · Urologique (hors prostate) · Mélanome · Hépatocarcinome · Vésicule biliaire · Cervical · Primitif inconnu</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 2. Visceral metastases -->
+    <div class="card">
+      <span class="card-num">02 / FACTEUR PRONOSTIQUE</span>
+      <h2>Métastases viscérales / cérébrales</h2>
+      <span class="score-badge" id="badge-visceral">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="visceral" value="0">
+          <div class="option-content">
+            <span class="option-label">Absentes</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="visceral" value="1">
+          <div class="option-content">
+            <span class="option-label">Nodulaires</span>
+            <span class="option-sub">Métastase(s) viscérale(s) ou cérébrale(s) nodulaire(s)</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="visceral" value="2">
+          <div class="option-content">
+            <span class="option-label">Disséminées</span>
+            <span class="option-sub">Dissémination pleurale, péritonéale ou leptoméningée</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. Laboratory data -->
+    <div class="card">
+      <span class="card-num">03 / FACTEUR PRONOSTIQUE</span>
+      <h2>Données biologiques</h2>
+      <span class="score-badge" id="badge-lab">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="lab" value="0">
+          <div class="option-content">
+            <span class="option-label">Normales</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="lab" value="1">
+          <div class="option-content">
+            <span class="option-label">Anormales</span>
+            <span class="option-sub">CRP ≥ 0,4 mg/dL · LDH ≥ 250 UI/L · Albumine &lt; 3,7 g/dL</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="lab" value="2">
+          <div class="option-content">
+            <span class="option-label">Critiques</span>
+            <span class="option-sub">Plaquettes &lt; 100 000/µL · Calcémie ≥ 10,3 mg/dL · Bilirubine totale ≥ 1,4 mg/dL</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 4. ECOG PS -->
+    <div class="card">
+      <span class="card-num">04 / FACTEUR PRONOSTIQUE</span>
+      <h2>Performance Status (ECOG)</h2>
+      <span class="score-badge" id="badge-ps">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="ps" value="0">
+          <div class="option-content">
+            <span class="option-label">PS 0–2</span>
+            <span class="option-sub">Autonome · Activités légères possibles · Autonomie partielle</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="ps" value="1">
+          <div class="option-content">
+            <span class="option-label">PS 3–4</span>
+            <span class="option-sub">Autonomie limitée · Alitement &gt; 50% du temps · Dépendant</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 5. Previous chemotherapy -->
+    <div class="card">
+      <span class="card-num">05 / FACTEUR PRONOSTIQUE</span>
+      <h2>Chimiothérapie antérieure</h2>
+      <span class="score-badge" id="badge-chemo">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="chemo" value="0">
+          <div class="option-content">
+            <span class="option-label">Non</span>
+            <span class="option-sub">Aucune chimiothérapie préalable</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="chemo" value="1">
+          <div class="option-content">
+            <span class="option-label">Oui</span>
+            <span class="option-sub">Au moins une ligne de chimiothérapie antérieure</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 6. Multiple skeletal metastases -->
+    <div class="card">
+      <span class="card-num">06 / FACTEUR PRONOSTIQUE</span>
+      <h2>Métastases osseuses multiples</h2>
+      <span class="score-badge" id="badge-multi">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="multi" value="0">
+          <div class="option-content">
+            <span class="option-label">Non · Lésion solitaire</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="multi" value="1">
+          <div class="option-content">
+            <span class="option-label">Oui · Lésions multiples</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <div id="warning">⚠ Veuillez renseigner tous les critères avant de calculer le score.</div>
+
+  <div class="btn-wrap">
+    <button id="calculate">Calculer le score →</button>
+  </div>
+
+  <!-- Result panel -->
+  <div id="result-panel">
+    <div class="result-header">
+      <div class="score-display">
+        <div class="score-number" id="res-score">—</div>
+        <div class="score-denom">/ 10</div>
+      </div>
+      <div class="risk-info">
+        <div class="risk-label-tag">Groupe pronostique</div>
+        <div class="risk-name" id="res-risk">—</div>
+        <div class="risk-median" id="res-median">—</div>
+      </div>
+    </div>
+
+    <table class="survival-table">
+      <thead>
+        <tr>
+          <th>Horizon</th>
+          <th class="surv-cell">3 mois</th>
+          <th class="surv-cell">6 mois</th>
+          <th class="surv-cell">12 mois</th>
+          <th class="surv-cell">24 mois</th>
+        </tr>
+      </thead>
+      <tbody id="survival-rows"></tbody>
+    </table>
+
+    <p class="disclaimer">Données issues de Kubota et al. 2019 (n=356). Outil d'aide à la décision — ne se substitue pas au jugement clinique.</p>
+
+    <div style="text-align:right;margin-top:1rem;">
+      <button class="btn-reset" id="reset-btn">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Katagiri Scoring System · Usage clinique uniquement</span>
+  <span>Kubota et al., <i>Radiation Oncology</i> 2019 — Open Access</span>
+</footer>
+
+<script>
+  const survivalData = {
+    low: {
+      label: 'Faible risque', labelClass: 'low', barClass: 'bar-low',
+      points: '0–3', median: 27,
+      s3: 94.4, s6: 77.8, s12: 61.1, s24: 55.6
+    },
+    intermediate: {
+      label: 'Risque intermédiaire', labelClass: 'intermediate', barClass: 'bar-intermediate',
+      points: '4–6', median: 6,
+      s3: 67.7, s6: 48.7, s12: 31.2, s24: 16.0
+    },
+    high: {
+      label: 'Risque élevé', labelClass: 'high', barClass: 'bar-high',
+      points: '7–10', median: 2,
+      s3: 39.1, s6: 22.1, s12: 9.0, s24: 3.0
+    }
+  };
+
+  const fields = ['primary','visceral','lab','ps','chemo','multi'];
+  const badges = {
+    primary: document.getElementById('badge-primary'),
+    visceral: document.getElementById('badge-visceral'),
+    lab: document.getElementById('badge-lab'),
+    ps: document.getElementById('badge-ps'),
+    chemo: document.getElementById('badge-chemo'),
+    multi: document.getElementById('badge-multi'),
+  };
+
+  // Live badge update
+  fields.forEach(field => {
+    document.querySelectorAll(`input[name="${field}"]`).forEach(radio => {
+      radio.addEventListener('change', () => {
+        const val = parseInt(radio.value);
+        badges[field].textContent = val + ' pt' + (val > 1 ? 's' : '');
+        badges[field].classList.add('active');
+      });
+    });
+  });
+
+  document.getElementById('calculate').addEventListener('click', () => {
+    let total = 0;
+    let allFilled = true;
+
+    for (const field of fields) {
+      const checked = document.querySelector(`input[name="${field}"]:checked`);
+      if (!checked) { allFilled = false; break; }
+      total += parseInt(checked.value);
+    }
+
+    const warning = document.getElementById('warning');
+    const panel = document.getElementById('result-panel');
+
+    if (!allFilled) {
+      warning.classList.add('visible');
+      panel.classList.remove('visible');
+      return;
+    }
+
+    warning.classList.remove('visible');
+
+    // Determine group
+    let group;
+    if (total <= 3) group = survivalData.low;
+    else if (total <= 6) group = survivalData.intermediate;
+    else group = survivalData.high;
+
+    // Fill result
+    document.getElementById('res-score').textContent = total;
+    const riskEl = document.getElementById('res-risk');
+    riskEl.textContent = group.label;
+    riskEl.className = 'risk-name ' + group.labelClass;
+    document.getElementById('res-median').textContent =
+      `Survie médiane : ${group.median} mois · Score ${group.points}`;
+
+    // Survival table
+    const tbody = document.getElementById('survival-rows');
+    tbody.innerHTML = '';
+
+    const timepoints = [
+      { label: '3 mois', val: group.s3 },
+      { label: '6 mois', val: group.s6 },
+      { label: '12 mois', val: group.s12 },
+      { label: '24 mois', val: group.s24 },
+    ];
+
+    // Summary row
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>Survie globale</td>` +
+      timepoints.map(t => `
+        <td class="surv-cell">
+          <strong>${t.val}%</strong>
+          <div class="survival-bar-wrap">
+            <div class="survival-bar ${group.barClass}" style="width:${t.val}%"></div>
+          </div>
+        </td>
+      `).join('');
+    tbody.appendChild(tr);
+
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    fields.forEach(field => {
+      document.querySelectorAll(`input[name="${field}"]`).forEach(r => r.checked = false);
+      badges[field].textContent = '—';
+      badges[field].classList.remove('active');
+    });
+    document.getElementById('result-panel').classList.remove('visible');
+    document.getElementById('warning').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
