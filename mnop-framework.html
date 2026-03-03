@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MNOP Framework · Spratt 2017</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d10;
+  --surface: #15151a;
+  --surface2: #1c1c23;
+  --border: #28283a;
+  --text: #e6e2da;
+  --text-dim: #72708a;
+  --text-mid: #a09cb8;
+
+  --m-color: #5a9e7a;
+  --n-color: #6c8ebf;
+  --o-color: #c47c3e;
+  --p-color: #9e5a8e;
+
+  --favourable: #4a9e6a;
+  --intermediate: #d4963a;
+  --unfavourable: #c05050;
+
+  --cebrt: #4a90d9;
+  --srs: #e8a44a;
+  --surgery: #d9604a;
+  --stabilize: #7dbb8e;
+  --palliative: #8a8a9e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 3rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.logo-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.ml { color: var(--m-color); }
+.nl { color: var(--n-color); }
+.ol { color: var(--o-color); }
+.pl { color: var(--p-color); }
+
+.title-rest {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 1.35rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.ref-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.4rem 0.8rem;
+  line-height: 1.7;
+  text-align: right;
+  flex-shrink: 0;
+  margin-top: 0.3rem;
+}
+
+/* ── MAIN ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+/* ── PHASE TABS ── */
+.phase-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.phase-tab {
+  background: var(--surface);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.phase-tab:hover { background: var(--surface2); }
+.phase-tab.active { background: var(--surface2); }
+
+.phase-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.phase-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-mid);
+}
+
+.phase-sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 0.1rem;
+}
+
+.phase-check {
+  margin-left: auto;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.phase-tab.done .phase-check { background: var(--m-color); border-color: var(--m-color); color: #000; }
+
+/* ── PILLARS NAV (MNOP) ── */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.pillar {
+  background: var(--surface);
+  padding: 1.2rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.pillar:hover, .pillar.active { background: var(--surface2); }
+
+.pillar-letter {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.pillar.M .pillar-letter { color: var(--m-color); }
+.pillar.N .pillar-letter { color: var(--n-color); }
+.pillar.O .pillar-letter { color: var(--o-color); }
+.pillar.P .pillar-letter { color: var(--p-color); }
+
+.pillar-title { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-mid); margin-bottom: 0.2rem; }
+.pillar-sub { font-size: 0.68rem; color: var(--text-dim); line-height: 1.4; }
+
+.pillar-check {
+  position: absolute; top: 0.7rem; right: 0.7rem;
+  width: 16px; height: 16px;
+  border-radius: 50%; border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; transition: all 0.3s;
+}
+.pillar.done .pillar-check { background: var(--m-color); border-color: var(--m-color); color: #000; }
+
+/* Step nav */
+.step-nav {
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;
+}
+.step-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border); cursor: pointer; transition: all 0.2s;
+}
+.step-dot.active { background: var(--text); transform: scale(1.3); }
+.step-dot.done { background: var(--m-color); }
+.step-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-dim); margin-left: 0.5rem; letter-spacing: 0.1em; }
+
+/* ── SECTION PANELS ── */
+.section-panel { display: none; animation: fadeIn 0.3s ease; }
+.section-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.5rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-letter-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: 5rem; line-height: 1; font-weight: 400;
+}
+.M .section-letter-big { color: var(--m-color); }
+.N .section-letter-big { color: var(--n-color); }
+.O .section-letter-big { color: var(--o-color); }
+.P .section-letter-big { color: var(--p-color); }
+
+.section-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-weight: 400; line-height: 1.1; }
+.section-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 0.3rem; line-height: 1.5; max-width: 620px; }
+
+/* ── CHOICE CARDS ── */
+.cards-grid { display: grid; gap: 1rem; margin-bottom: 1.5rem; }
+.cards-grid.two { grid-template-columns: 1fr 1fr; }
+.cards-grid.three { grid-template-columns: repeat(3, 1fr); }
+.cards-grid.four { grid-template-columns: repeat(4, 1fr); }
+
+.choice-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px; padding: 1.2rem 1.3rem;
+  cursor: pointer; transition: all 0.15s; position: relative;
+}
+.choice-card:hover { border-color: var(--text-dim); background: var(--surface2); }
+
+.choice-card.M-card.selected { border-color: var(--m-color); background: var(--surface2); }
+.choice-card.N-card.selected { border-color: var(--n-color); background: var(--surface2); }
+.choice-card.O-card.selected { border-color: var(--o-color); background: var(--surface2); }
+.choice-card.P-card.selected { border-color: var(--p-color); background: var(--surface2); }
+.choice-card.fav.selected    { border-color: var(--favourable); background: var(--surface2); }
+.choice-card.inter.selected  { border-color: var(--intermediate); background: var(--surface2); }
+.choice-card.unfav.selected  { border-color: var(--unfavourable); background: var(--surface2); }
+
+.card-value {
+  font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500;
+  line-height: 1; margin-bottom: 0.5rem; opacity: 0.2; transition: opacity 0.2s;
+}
+.choice-card.selected .card-value { opacity: 1; }
+.choice-card.M-card.selected .card-value { color: var(--m-color); }
+.choice-card.N-card.selected .card-value { color: var(--n-color); }
+.choice-card.O-card.selected .card-value { color: var(--o-color); }
+.choice-card.P-card.selected .card-value { color: var(--p-color); }
+.choice-card.fav.selected .card-value    { color: var(--favourable); }
+.choice-card.inter.selected .card-value  { color: var(--intermediate); }
+.choice-card.unfav.selected .card-value  { color: var(--unfavourable); }
+
+.card-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 0.3rem; line-height: 1.3; }
+.card-desc  { font-size: 0.75rem; color: var(--text-dim); line-height: 1.5; }
+
+.card-badge {
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  font-family: 'DM Mono', monospace; font-size: 0.58rem;
+  padding: 0.15rem 0.4rem; border-radius: 2px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+/* ── RADIORESPONSIVENESS TABLE ── */
+.rr-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.78rem; margin-bottom: 1.2rem;
+  border: 1px solid var(--border); border-radius: 3px; overflow: hidden;
+}
+.rr-table th {
+  background: var(--surface2); padding: 0.6rem 0.9rem;
+  text-align: left; font-weight: 500;
+  font-family: 'DM Mono', monospace; font-size: 0.63rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.rr-table th.fav-h { color: var(--favourable); }
+.rr-table th.int-h { color: var(--intermediate); }
+.rr-table th.unf-h { color: var(--unfavourable); }
+
+.rr-table td {
+  padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--border);
+  color: var(--text-mid); vertical-align: top; line-height: 1.5;
+}
+.rr-table tr:last-child td { border-bottom: none; }
+.rr-table .row-label { color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.05em; }
+
+/* SINS mini */
+.sins-row {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 3px; padding: 0.8rem 1rem; margin-bottom: 1rem;
+}
+.sins-score-mini {
+  font-family: 'DM Mono', monospace; font-size: 2rem;
+  font-weight: 500; color: var(--m-color); min-width: 3rem;
+}
+.sins-interp { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+.sins-link {
+  margin-left: auto; font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  color: var(--m-color); text-decoration: none; border: 1px solid var(--m-color);
+  padding: 0.2rem 0.6rem; border-radius: 2px; letter-spacing: 0.08em;
+  text-transform: uppercase; opacity: 0.8; transition: opacity 0.2s; flex-shrink: 0;
+}
+.sins-link:hover { opacity: 1; }
+
+/* Phase 1 (systemic pre-filter) */
+.algo1-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn-next {
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+  background: transparent; color: var(--text);
+  border: 1.5px solid var(--border); padding: 0.65rem 1.8rem;
+  cursor: pointer; border-radius: 2px; letter-spacing: 0.05em;
+  text-transform: uppercase; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-next:hover { border-color: var(--text-mid); background: var(--surface2); }
+.btn-next.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-next.primary:hover { background: var(--text-mid); border-color: var(--text-mid); }
+
+.warn-msg {
+  display: none; font-size: 0.8rem; color: var(--o-color);
+  font-style: italic; margin-top: 0.8rem;
+  padding: 0.5rem 0.8rem; border-left: 2px solid var(--o-color);
+}
+.warn-msg.visible { display: block; }
+
+/* ── RESULT ── */
+#result-section { display: none; animation: fadeIn 0.5s ease; }
+#result-section.visible { display: block; }
+
+.result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+.result-top { padding: 2rem 2.5rem; border-bottom: 1px solid var(--border); }
+
+.result-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.8rem; }
+.result-decision { font-family: 'DM Serif Display', serif; font-size: 2.2rem; font-weight: 400; line-height: 1.2; margin-bottom: 0.8rem; }
+.result-rationale { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; max-width: 700px; margin-top: 1rem; }
+
+.decision-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+.dtag { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.7rem; border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid currentColor; }
+.dtag-cebrt { color: var(--cebrt); }
+.dtag-srs   { color: var(--srs); }
+.dtag-surgery { color: var(--surgery); }
+.dtag-stabilize { color: var(--stabilize); }
+.dtag-palliative { color: var(--palliative); }
+
+.summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+.summary-cell { padding: 1rem 1.2rem; border-right: 1px solid var(--border); }
+.summary-cell:last-child { border-right: none; }
+.summary-dim { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.summary-cell.ph1 .summary-dim { color: var(--text-dim); }
+.summary-cell.M .summary-dim { color: var(--m-color); }
+.summary-cell.N .summary-dim { color: var(--n-color); }
+.summary-cell.O .summary-dim { color: var(--o-color); }
+.summary-cell.P .summary-dim { color: var(--p-color); }
+.summary-val { font-size: 0.82rem; color: var(--text); font-weight: 500; line-height: 1.3; }
+.summary-note { font-size: 0.68rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic; }
+
+.btn-reset { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dim); background: none; border: none; cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1.5rem; text-decoration: underline; transition: color 0.2s; display: block; margin-left: auto; margin-right: auto; }
+.btn-reset:hover { color: var(--text); }
+
+/* Palliative overlay */
+#palliative-panel { display: none; }
+#palliative-panel.visible {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2rem 2.5rem;
+}
+
+@media (max-width: 700px) {
+  .pillars { grid-template-columns: repeat(2, 1fr); }
+  .cards-grid.three, .cards-grid.four { grid-template-columns: 1fr 1fr; }
+  .cards-grid.two { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .phase-bar { grid-template-columns: 1fr; }
+  header { flex-direction: column; }
+  h1 { font-size: 2rem; }
+  .algo1-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo-tag">Algorithme décisionnel · Métastases rachidiennes · Spine Oncology Consortium</div>
+    <h1>
+      <span class="ml">M</span><span class="nl">N</span><span class="ol">O</span><span class="pl">P</span>
+      <span class="title-rest">Framework</span>
+    </h1>
+  </div>
+  <div class="ref-pill">
+    Spratt et al., <em>Lancet Oncol</em> 2017;18:e720–e730<br>
+    <span class="ml">M</span>echanical · <span class="nl">N</span>eurological · <span class="ol">O</span>ncological · <span class="pl">P</span>referred treatment
+  </div>
+</header>
+
+<main>
+
+  <!-- Phase tabs -->
+  <div class="phase-bar" id="phase-bar">
+    <div class="phase-tab active" id="ptab-0" onclick="goPhase(0)">
+      <div>
+        <div class="phase-num">Phase 1 · Évaluation systémique préalable</div>
+        <div class="phase-title">Algorithme 1 — Patient et maladie systémique</div>
+        <div class="phase-sub">KPS · Charge tumorale · Traitements systémiques</div>
+      </div>
+      <div class="phase-check" id="pcheck-0"></div>
+    </div>
+    <div class="phase-tab" id="ptab-1" onclick="goPhase(1)">
+      <div>
+        <div class="phase-num">Phase 2 · Évaluation locale</div>
+        <div class="phase-title">Algorithme MNOP — Lésion rachidienne</div>
+        <div class="phase-sub">Mécanique · Neurologique · Oncologique</div>
+      </div>
+      <div class="phase-check" id="pcheck-1"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PHASE 1: SYSTEMIC
+       ══════════════════════════════════ -->
+  <div id="phase-0-content">
+    <div class="section-header" style="margin-bottom:1.5rem;">
+      <div style="font-family:'DM Serif Display',serif;font-size:4rem;color:var(--text-dim);opacity:0.3;line-height:1;">1</div>
+      <div>
+        <div class="section-title" style="font-family:'DM Serif Display',serif;font-size:1.8rem;">Évaluation systémique initiale</div>
+        <div class="section-desc">Évaluation du statut général, de la charge tumorale et des options de traitement systémique avant d'appliquer l'algorithme MNOP.</div>
+      </div>
+    </div>
+
+    <!-- KPS -->
+    <div style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.6rem;">Performance status (KPS)</div>
+    <div class="cards-grid two" style="margin-bottom:1.2rem;">
+      <div class="choice-card M-card" data-group="kps" data-val="good" onclick="selectCard(this,'kps')">
+        <div class="card-value">KPS > 40</div>
+        <div class="card-title">Correct à excellent + espérance de vie > 2 mois</div>
+        <div class="card-desc">Patient pouvant bénéficier d'une approche active — passer à l'évaluation MNOP</div>
+      </div>
+      <div class="choice-card M-card" data-group="kps" data-val="poor" onclick="selectCard(this,'kps')">
+        <div class="card-value">KPS ≤ 40</div>
+        <div class="card-title">Mauvais état général ou espérance de vie ≤ 2 mois</div>
+        <div class="card-desc">Meilleurs soins de support ou cEBRT simple — spine SRS non recommandé</div>
+      </div>
+    </div>
+
+    <!-- Systemic burden -->
+    <div style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.6rem;">Charge tumorale systémique</div>
+    <div class="cards-grid two" style="margin-bottom:1.2rem;">
+      <div class="choice-card N-card" data-group="burden" data-val="minimal" onclick="selectCard(this,'burden')">
+        <div class="card-value" style="font-size:1rem;">Minime / modérée</div>
+        <div class="card-title">Maladie systémique limitée</div>
+        <div class="card-desc">Traitement actif de la lésion rachidienne potentiellement bénéfique</div>
+      </div>
+      <div class="choice-card N-card" data-group="burden" data-val="extensive" onclick="selectCard(this,'burden')">
+        <div class="card-value" style="font-size:1rem;">Étendue</div>
+        <div class="card-title">Maladie systémique étendue</div>
+        <div class="card-desc">Évaluer disponibilité de traitements systémiques efficaces</div>
+      </div>
+    </div>
+
+    <!-- Systemic treatment -->
+    <div style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.6rem;">Traitements systémiques disponibles</div>
+    <div class="cards-grid two" style="margin-bottom:1.5rem;">
+      <div class="choice-card O-card" data-group="systx" data-val="yes" onclick="selectCard(this,'systx')">
+        <div class="card-value" style="font-size:1rem;">Disponibles</div>
+        <div class="card-title">Thérapies efficaces disponibles</div>
+        <div class="card-desc">Pour certaines histologies très chimiosensibles (lymphome, CBNPC avec mutation pilote…), la thérapie systémique seule peut être suffisante</div>
+      </div>
+      <div class="choice-card O-card" data-group="systx" data-val="no" onclick="selectCard(this,'systx')">
+        <div class="card-value" style="font-size:1rem;">Limitées</div>
+        <div class="card-title">Peu ou pas de thérapies efficaces</div>
+        <div class="card-desc">Traitement locorégional d'autant plus important pour le contrôle tumoral</div>
+      </div>
+    </div>
+
+    <div class="warn-msg" id="warn-ph1">Compléter les trois évaluations pour continuer.</div>
+    <button class="btn-next primary" onclick="validatePhase1()">Évaluation MNOP →</button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PHASE 2: MNOP
+       ══════════════════════════════════ -->
+  <div id="phase-1-content" style="display:none;">
+
+    <!-- Pillars -->
+    <div class="pillars" id="pillars-nav">
+      <div class="pillar M active" data-step="0" onclick="goStep(0)">
+        <div class="pillar-check" id="check-0"></div>
+        <div class="pillar-letter">M</div>
+        <div class="pillar-title">Mechanical</div>
+        <div class="pillar-sub">Stabilité SINS</div>
+      </div>
+      <div class="pillar N" data-step="1" onclick="goStep(1)">
+        <div class="pillar-check" id="check-1"></div>
+        <div class="pillar-letter">N</div>
+        <div class="pillar-title">Neurological</div>
+        <div class="pillar-sub">Extension épidurale</div>
+      </div>
+      <div class="pillar O" data-step="2" onclick="goStep(2)">
+        <div class="pillar-check" id="check-2"></div>
+        <div class="pillar-letter">O</div>
+        <div class="pillar-title">Oncological</div>
+        <div class="pillar-sub">Radioresponsiveness</div>
+      </div>
+      <div class="pillar P" data-step="3" onclick="goStep(3)">
+        <div class="pillar-check" id="check-3"></div>
+        <div class="pillar-letter">P</div>
+        <div class="pillar-title">Preferred Tx</div>
+        <div class="pillar-sub">Synthèse décisionnelle</div>
+      </div>
+    </div>
+
+    <!-- Step dots -->
+    <div class="step-nav">
+      <div class="step-dot active" id="dot-0" onclick="goStep(0)"></div>
+      <div class="step-dot" id="dot-1" onclick="goStep(1)"></div>
+      <div class="step-dot" id="dot-2" onclick="goStep(2)"></div>
+      <div class="step-dot" id="dot-3" onclick="goStep(3)"></div>
+      <span class="step-label" id="step-label">M — Mécanique</span>
+    </div>
+
+    <!-- ── STEP M: MECHANICAL ── -->
+    <div class="section-panel M active" id="panel-0">
+      <div class="section-header">
+        <div class="section-letter-big M">M</div>
+        <div>
+          <div class="section-title">Stabilité mécanique</div>
+          <div class="section-desc">Score SINS (0–18). Score indéterminé (7–12) : traité comme <strong>stable</strong> dans le MNOP framework mais consultation chirurgicale recommandée.</div>
+        </div>
+      </div>
+
+      <div class="sins-row">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.3rem;">Score SINS (0–18)</div>
+          <input type="number" id="sins-input" min="0" max="18" placeholder="—"
+            style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;width:80px;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:2px;text-align:center;"
+            oninput="updateSINS(this.value)">
+        </div>
+        <div class="sins-interp" id="sins-interp"></div>
+        <a class="sins-link" href="https://ronant99-lgtm.github.io/meta-os/sins-calculator.html" target="_blank">↗ Calculateur SINS</a>
+      </div>
+
+      <div class="cards-grid three">
+        <div class="choice-card M-card" id="mc-stable" onclick="selectMech('stable')">
+          <div class="card-value" style="color:var(--m-color)">0–6</div>
+          <div class="card-title">Stable</div>
+          <div class="card-desc">Pas de stabilisation nécessaire sur la base du SINS</div>
+        </div>
+        <div class="choice-card M-card" id="mc-indet" onclick="selectMech('indeterminate')">
+          <div class="card-value" style="color:var(--intermediate)">7–12</div>
+          <div class="card-title">Indéterminé</div>
+          <div class="card-desc">Évaluation chirurgicale recommandée · Traité comme <strong>stable</strong> dans le MNOP</div>
+          <div class="card-badge" style="background:rgba(212,150,58,0.15);color:var(--intermediate)">→ Stable</div>
+        </div>
+        <div class="choice-card M-card" id="mc-unstable" onclick="selectMech('unstable')">
+          <div class="card-value" style="color:var(--surgery)">13–18</div>
+          <div class="card-title">Instable</div>
+          <div class="card-desc">Stabilisation chirurgicale indiquée · Suivi de traitement selon MNOP</div>
+        </div>
+      </div>
+
+      <div class="warn-msg" id="warn-0">Sélectionner la stabilité mécanique pour continuer.</div>
+      <button class="btn-next primary" onclick="nextStep(0)">Évaluation neurologique →</button>
+    </div>
+
+    <!-- ── STEP N: NEUROLOGICAL ── -->
+    <div class="section-panel N" id="panel-1">
+      <div class="section-header">
+        <div class="section-letter-big N">N</div>
+        <div>
+          <div class="section-title">Risque neurologique</div>
+          <div class="section-desc">Extension épidural de la tumeur et risque de compression médullaire. Distinction entre maladie osseuse pure, extension paravertébrale et compression médullaire épidural.</div>
+        </div>
+      </div>
+
+      <div class="cards-grid three">
+        <div class="choice-card N-card" data-group="neuro" data-val="bone" onclick="selectCard(this,'neuro')">
+          <div class="card-value" style="color:var(--n-color)">Os</div>
+          <div class="card-title">Tumeur confinée à l'os ou aux tissus mous paravertébraux</div>
+          <div class="card-desc">Pas de contact avec le canal rachidien · Risque neurologique faible</div>
+          <div class="card-badge" style="background:rgba(108,142,191,0.1);color:var(--n-color)">Bone only</div>
+        </div>
+        <div class="choice-card N-card" data-group="neuro" data-val="mech_pain" onclick="selectCard(this,'neuro')">
+          <div class="card-value" style="color:var(--intermediate)">Douleur</div>
+          <div class="card-title">Rachis stable avec douleur mécanique</div>
+          <div class="card-desc">Pas d'extension épidural significative · Composante mécanique dominante</div>
+          <div class="card-badge" style="background:rgba(212,150,58,0.1);color:var(--intermediate)">Mech. pain</div>
+        </div>
+        <div class="choice-card N-card" data-group="neuro" data-val="epidural" onclick="selectCard(this,'neuro')">
+          <div class="card-value" style="color:var(--unfavourable)">Épidural</div>
+          <div class="card-title">Extension épidural ou compression médullaire</div>
+          <div class="card-desc">Contact avec le canal rachidien (Bilsky ≥ 1b) · Risque neurologique élevé · Urgence potentielle</div>
+          <div class="card-badge" style="background:rgba(192,80,80,0.1);color:var(--unfavourable)">Epidural / SCC</div>
+        </div>
+      </div>
+
+      <div class="warn-msg" id="warn-1">Sélectionner le statut neurologique pour continuer.</div>
+      <div style="display:flex;gap:0.8rem;margin-top:1.2rem;">
+        <button class="btn-next" onclick="goStep(0)">← Retour</button>
+        <button class="btn-next primary" onclick="nextStep(1)">Évaluation oncologique →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP O: ONCOLOGICAL ── -->
+    <div class="section-panel O" id="panel-2">
+      <div class="section-header">
+        <div class="section-letter-big O">O</div>
+        <div>
+          <div class="section-title">Paramètres oncologiques</div>
+          <div class="section-desc">Le MNOP utilise la notion de <strong>radioresponsiveness</strong> (réponse rapide en taille) plutôt que la simple radiosensibilité. Deux dimensions : contrôle local durable ET réduction rapide de la tumeur.</div>
+        </div>
+      </div>
+
+      <!-- Radioresponsiveness table -->
+      <table class="rr-table">
+        <thead>
+          <tr>
+            <th style="border-right:1px solid var(--border);color:var(--text-dim);">Caractéristique</th>
+            <th class="fav-h" style="border-right:1px solid var(--border);">Favorable</th>
+            <th class="int-h" style="border-right:1px solid var(--border);">Intermédiaire</th>
+            <th class="unf-h">Défavorable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label" style="border-right:1px solid var(--border);">Contrôle local durable<br><em>(radiosensibilité)</em></td>
+            <td style="border-right:1px solid var(--border);color:var(--favourable);">Radiosensible · très haut contrôle local</td>
+            <td style="border-right:1px solid var(--border);color:var(--intermediate);">Résultats mixtes · contrôle modéré à élevé</td>
+            <td style="color:var(--unfavourable);">Radiorésistant · faible contrôle local</td>
+          </tr>
+          <tr>
+            <td class="row-label" style="border-right:1px solid var(--border);">Réduction rapide de taille<br><em>(radioresponsiveness)</em></td>
+            <td style="border-right:1px solid var(--border);color:var(--favourable);">Très radiorépondeur · réponse radiographique rapide probable</td>
+            <td style="border-right:1px solid var(--border);color:var(--intermediate);">Modérément radiorépondeur · réduction possible</td>
+            <td style="color:var(--unfavourable);">Peu radiorépondeur · réduction rapide peu probable</td>
+          </tr>
+          <tr>
+            <td class="row-label" style="border-right:1px solid var(--border);">Histologies exemples</td>
+            <td style="border-right:1px solid var(--border);">Chlorome · Lymphome · Myélome · Séminome / Germinome · CPC</td>
+            <td style="border-right:1px solid var(--border);">Prostate · Sein · HPV+ carcinome épidermoïde</td>
+            <td>Sarcome · Mélanome · CBNPC · Carcinome rénal · Cancers GI</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cards-grid three">
+        <div class="choice-card fav" data-group="radio" data-val="favourable" onclick="selectCard(this,'radio')">
+          <div class="card-value">F</div>
+          <div class="card-title">Favorable</div>
+          <div class="card-desc">Lymphome · Myélome · Séminome · CPC · Chlorome<br><em style="font-size:0.7rem;opacity:0.7">cEBRT efficace pour contrôle local et réduction rapide</em></div>
+        </div>
+        <div class="choice-card inter" data-group="radio" data-val="intermediate" onclick="selectCard(this,'radio')">
+          <div class="card-value">I</div>
+          <div class="card-title">Intermédiaire</div>
+          <div class="card-desc">Sein · Prostate · HPV+ SCC<br><em style="font-size:0.7rem;opacity:0.7">cEBRT ou SRS selon contexte neurologique</em></div>
+        </div>
+        <div class="choice-card unfav" data-group="radio" data-val="unfavourable" onclick="selectCard(this,'radio')">
+          <div class="card-value">U</div>
+          <div class="card-title">Défavorable</div>
+          <div class="card-desc">Sarcome · Mélanome · CBNPC · Rénal · GI<br><em style="font-size:0.7rem;opacity:0.7">SRS nécessaire pour contrôle local durable</em></div>
+        </div>
+      </div>
+
+      <div class="warn-msg" id="warn-2">Sélectionner la catégorie histologique pour obtenir la recommandation.</div>
+      <div style="display:flex;gap:0.8rem;margin-top:1.2rem;">
+        <button class="btn-next" onclick="goStep(1)">← Retour</button>
+        <button class="btn-next primary" onclick="computeMNOP()">Obtenir la recommandation →</button>
+      </div>
+    </div>
+
+    <!-- ── RESULT ── -->
+    <div id="result-section">
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;border-top:1px solid var(--border);padding-top:1.5rem;">
+        P — Preferred Treatment · Recommandation MNOP
+      </div>
+      <div class="result-card">
+        <div class="result-top">
+          <div class="result-label">Recommandation MNOP</div>
+          <div class="result-decision" id="res-decision">—</div>
+          <div class="decision-tags" id="res-tags"></div>
+          <div class="result-rationale" id="res-rationale">—</div>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-cell ph1">
+            <div class="summary-dim">Phase 1</div>
+            <div class="summary-val" id="sum-ph1">—</div>
+            <div class="summary-note" id="sum-ph1-note"></div>
+          </div>
+          <div class="summary-cell M">
+            <div class="summary-dim">Mécanique</div>
+            <div class="summary-val" id="sum-m">—</div>
+            <div class="summary-note" id="sum-m-note"></div>
+          </div>
+          <div class="summary-cell N">
+            <div class="summary-dim">Neurologique</div>
+            <div class="summary-val" id="sum-n">—</div>
+            <div class="summary-note" id="sum-n-note"></div>
+          </div>
+          <div class="summary-cell O">
+            <div class="summary-dim">Oncologique</div>
+            <div class="summary-val" id="sum-o">—</div>
+            <div class="summary-note" id="sum-o-note"></div>
+          </div>
+          <div class="summary-cell P">
+            <div class="summary-dim">Traitement</div>
+            <div class="summary-val" id="sum-p">—</div>
+            <div class="summary-note" id="sum-p-note"></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-reset" onclick="resetAll()">↺ Nouvelle évaluation</button>
+      </div>
+      <div style="margin-top:1.5rem;font-size:0.72rem;color:var(--text-dim);font-style:italic;text-align:center;line-height:1.7;">
+        MNOP framework · Spratt et al., Lancet Oncol 2017;18:e720–e730 · Outil d'aide à la décision multidisciplinaire.<br>
+        Ne se substitue pas à la discussion en RCP ni au jugement clinique individuel.
+      </div>
+    </div>
+
+  </div><!-- /phase-1-content -->
+
+  <!-- Palliative panel (KPS poor) -->
+  <div id="palliative-panel">
+    <div style="font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:1rem;">Soins de support / cEBRT palliative</div>
+    <div style="font-size:0.88rem;color:var(--text-mid);line-height:1.7;max-width:700px;margin-bottom:1.5rem;">
+      KPS ≤ 40 ou espérance de vie ≤ 2 mois : le bénéfice d'une approche active (spine SRS, chirurgie) est peu probable.
+      Une fraction unique de cEBRT (8 Gy × 1) est recommandée pour soulager la douleur. Cinq fractions peuvent être utilisées en cas de compression médullaire.
+      Discussion sur les objectifs de soins avec le patient, ses proches et l'équipe de soins palliatifs.
+    </div>
+    <div class="decision-tags" style="margin-bottom:1.5rem;">
+      <span class="dtag dtag-palliative">BSC / Soins de support</span>
+      <span class="dtag dtag-cebrt">cEBRT (8 Gy × 1 ou 4 Gy × 5)</span>
+    </div>
+    <button class="btn-next" onclick="resetAll()">↺ Nouvelle évaluation</button>
+  </div>
+
+</main>
+
+<script>
+const state = {
+  kps: null, burden: null, systx: null,
+  stability: null, stabilityRaw: null, sins: null,
+  neuro: null, radio: null,
+  currentPhase: 0, currentStep: 0
+};
+
+const stepLabels = ['M — Mécanique','N — Neurologique','O — Oncologique','P — Traitement'];
+
+// ── PHASE NAVIGATION ──
+function goPhase(n) {
+  document.getElementById('phase-0-content').style.display = n === 0 ? 'block' : 'none';
+  document.getElementById('phase-1-content').style.display = n === 1 ? 'block' : 'none';
+  document.getElementById('palliative-panel').classList.remove('visible');
+  document.querySelectorAll('.phase-tab').forEach((t,i) => { t.classList.remove('active'); if(i===n) t.classList.add('active'); });
+  state.currentPhase = n;
+}
+
+function validatePhase1() {
+  if (!state.kps || !state.burden || !state.systx) {
+    document.getElementById('warn-ph1').classList.add('visible'); return;
+  }
+  document.getElementById('warn-ph1').classList.remove('visible');
+  document.getElementById('pcheck-0').textContent = '✓';
+  document.getElementById('ptab-0').classList.add('done');
+
+  if (state.kps === 'poor') {
+    document.getElementById('phase-0-content').style.display = 'none';
+    document.getElementById('palliative-panel').classList.add('visible');
+    return;
+  }
+  goPhase(1);
+}
+
+// ── STEP NAVIGATION (MNOP) ──
+function goStep(n) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach((d,i) => {
+    d.classList.remove('active');
+    const vals = [state.stability, state.neuro, state.radio, null];
+    if (i < n && vals[i]) d.classList.add('done'); else if (i===n) d.classList.add('active');
+  });
+  document.querySelectorAll('.pillar').forEach((p,i) => { p.classList.remove('active'); if(i===n) p.classList.add('active'); });
+  document.getElementById('step-label').textContent = stepLabels[n];
+  state.currentStep = n;
+  document.getElementById('result-section').classList.remove('visible');
+}
+
+function nextStep(current) {
+  const fields = ['stability','neuro','radio'];
+  const warnId = 'warn-' + current;
+  if (!state[fields[current]]) { document.getElementById(warnId).classList.add('visible'); return; }
+  document.getElementById(warnId).classList.remove('visible');
+  document.getElementById('check-' + current).textContent = '✓';
+  document.querySelectorAll('.pillar')[current].classList.add('done');
+  goStep(current + 1);
+}
+
+// ── CARD SELECTION ──
+function selectCard(el, group) {
+  el.closest('.section-panel, #phase-0-content').querySelectorAll(`.choice-card[data-group="${group}"]`)
+    .forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[group] = el.dataset.val;
+  // clear warning
+  const panel = el.closest('[id^="panel-"], #phase-0-content');
+  if (panel) {
+    const wid = panel.id === 'phase-0-content' ? 'warn-ph1' : 'warn-' + panel.id.replace('panel-','');
+    const w = document.getElementById(wid);
+    if (w) w.classList.remove('visible');
+  }
+}
+
+// ── SINS ──
+function updateSINS(val) {
+  const v = parseInt(val);
+  state.sins = isNaN(v) ? null : Math.max(0, Math.min(18,v));
+  const interp = document.getElementById('sins-interp');
+  if (state.sins === null || isNaN(v)) { interp.textContent = ''; return; }
+  if (v < 0 || v > 18) { interp.textContent = 'Valeur hors plage (0–18)'; return; }
+  if (v <= 6) selectMech('stable');
+  else if (v <= 12) selectMech('indeterminate');
+  else selectMech('unstable');
+  const col = v <= 6 ? 'var(--m-color)' : v <= 12 ? 'var(--intermediate)' : 'var(--surgery)';
+  const stab = v <= 6 ? 'Stable' : v <= 12 ? 'Indéterminé (→ stable)' : 'Instable';
+  interp.innerHTML = `SINS <strong style="color:${col}">${v}/18</strong> · <span style="color:${col}">${stab}</span>`;
+}
+
+function selectMech(raw) {
+  state.stabilityRaw = raw;
+  state.stability = (raw === 'unstable') ? 'unstable' : 'stable';
+  ['mc-stable','mc-indet','mc-unstable'].forEach(id => document.getElementById(id).classList.remove('selected'));
+  const map = { stable:'mc-stable', indeterminate:'mc-indet', unstable:'mc-unstable' };
+  document.getElementById(map[raw]).classList.add('selected');
+  document.getElementById('warn-0').classList.remove('visible');
+}
+
+// ── COMPUTE MNOP ──
+function computeMNOP() {
+  if (!state.radio) { document.getElementById('warn-2').classList.add('visible'); return; }
+  document.getElementById('warn-2').classList.remove('visible');
+  document.getElementById('check-2').textContent = '✓';
+  document.getElementById('check-3').textContent = '→';
+  document.querySelectorAll('.pillar')[2].classList.add('done');
+  document.querySelectorAll('.pillar')[3].classList.add('active');
+
+  const { stability, stabilityRaw, neuro, radio, sins, kps, burden, systx } = state;
+  const isUnstable = stability === 'unstable';
+
+  let decision = '', tags = [], rationale = '';
+
+  // MNOP algorithm (Spratt 2017, Fig. 3)
+  if (isUnstable) {
+    decision = 'Stabilisation chirurgicale';
+    tags = ['stabilize'];
+    rationale = 'Instabilité rachidienne (SINS ≥ 13) : la stabilisation chirurgicale est la priorité, indépendamment du statut neurologique ou de la radiosensibilité tumorale. Options : ciment percutané, vissage percutané ou chirurgie ouverte selon l\'étendue de l\'instabilité et l\'état général. La radiothérapie sera discutée après stabilisation selon les paramètres N et O.';
+  } else {
+    // Stable (or indeterminate → stable)
+    if (neuro === 'mech_pain') {
+      decision = 'Stéroïdes · Corset · Vertébroplastie';
+      tags = [];
+      rationale = 'Rachis stable avec douleur mécanique prédominante, sans extension épidural significative : les options conservatrices sont prioritaires. Stéroïdes pour la composante inflammatoire, corset rigide pour l\'immobilisation, vertébroplastie/cyphoplastie pour les fractures-tassements douloureuses (soulagement dans 80–97% des cas). La radiothérapie peut être envisagée en complément selon l\'histologie.';
+    } else if (neuro === 'bone') {
+      // Tumour confined to bone
+      if (radio === 'favourable') {
+        decision = 'cEBRT';
+        tags = ['cebrt'];
+        rationale = 'Tumeur confinée à l\'os ou aux parties molles paravertébrales, histologie favorable : la cEBRT est le traitement standard. Elle assure un contrôle local durable et une réponse rapide (décompression mitotique). Fractionnement adapté au pronostic : 8 Gy × 1 en situation palliative simple, 30 Gy/10 fr ou 20 Gy/5 fr pour un contrôle local plus durable.';
+      } else if (radio === 'intermediate') {
+        decision = 'cEBRT ou SRS';
+        tags = ['cebrt','srs'];
+        rationale = 'Tumeur confinée à l\'os, histologie intermédiaire : cEBRT ou SRS sont tous deux envisageables. La cEBRT offre un contrôle modéré à élevé; la SRS améliore le contrôle local durable. La décision dépend de la disponibilité de la SRS, du pronostic global et des préférences du patient. La SRS est à privilégier si l\'espérance de vie est supérieure à 6–12 mois.';
+      } else {
+        decision = 'SRS / SBRT';
+        tags = ['srs'];
+        rationale = 'Tumeur confinée à l\'os, histologie défavorable (radiorésistante) : la SRS/SBRT est indiquée pour obtenir un contrôle local durable. Taux de contrôle local à 12 mois > 85% quelle que soit l\'histologie avec 24 Gy. La cEBRT conventionnelle est insuffisante pour ces histologies (contrôle < 50% à 1 an).';
+      }
+    } else {
+      // Epidural extension / SCC
+      if (radio === 'favourable') {
+        decision = 'cEBRT';
+        tags = ['cebrt'];
+        rationale = 'Extension épidural ou compression médullaire, histologie favorable : la cEBRT reste le traitement de référence. Les tumeurs radiosensibles (lymphome, myélome, sein, prostate) répondent à la cEBRT même en cas de compression médullaire, par mort mitotique et décompression progressive. Stéroïdes à forte dose en urgence. La chirurgie peut être évitée.';
+      } else if (radio === 'intermediate') {
+        decision = 'cEBRT ou chirurgie de séparation + cEBRT/SRS';
+        tags = ['cebrt','surgery','srs'];
+        rationale = 'Extension épidural, histologie intermédiaire : les options incluent la cEBRT seule, ou la chirurgie de séparation suivie de cEBRT ou SRS. Le choix dépend du degré de compression (grade Bilsky), de la capacité à tolérer la chirurgie, et de l\'accès à la SRS. Pour les grades Bilsky 2–3 chez un patient opérable, la chirurgie de séparation + SRS optimise le contrôle local.';
+      } else {
+        decision = 'Chirurgie de séparation + SRS';
+        tags = ['surgery','srs'];
+        rationale = 'Extension épidural avec histologie défavorable (radiorésistante) : la chirurgie de séparation est nécessaire pour créer un intervalle entre la tumeur et la moelle, permettant de délivrer une dose ablative en SRS (15–24 Gy) sans risque de myélopathie. Contrôle local à 1 an de 90–96% avec cette approche. Stéroïdes à forte dose en urgence.';
+      }
+    }
+    // Add stabilization note if indeterminate
+    if (stabilityRaw === 'indeterminate' && decision !== 'Stéroïdes · Corset · Vertébroplastie') {
+      rationale += '\n\nNote : SINS indéterminé (7–12) — consultation chirurgicale recommandée pour évaluer la nécessité d\'une stabilisation percutanée (ciment ± vissage).';
+    }
+  }
+
+  // Render
+  document.getElementById('res-decision').textContent = decision;
+  const tagColors = { cebrt:'dtag-cebrt', srs:'dtag-srs', surgery:'dtag-surgery', stabilize:'dtag-stabilize' };
+  const tagLabels = { cebrt:'cEBRT', srs:'SRS / SBRT', surgery:'Chirurgie de séparation', stabilize:'Stabilisation' };
+  const tagsEl = document.getElementById('res-tags');
+  tagsEl.innerHTML = tags.map(t => `<span class="dtag ${tagColors[t]}">${tagLabels[t]}</span>`).join('');
+  document.getElementById('res-rationale').style.whiteSpace = 'pre-line';
+  document.getElementById('res-rationale').textContent = rationale;
+
+  // Summary
+  const kpsLabels = { good:'KPS > 40 · > 2 mois', poor:'KPS ≤ 40' };
+  const burdenLabels = { minimal:'Minime / modérée', extensive:'Étendue' };
+  const stabLabels = { stable:'Stable (SINS 0–6)', indeterminate:'Indéterminé (SINS 7–12)', unstable:'Instable (SINS 13–18)' };
+  const neuroLabels = { bone:'Os / paravertébral', mech_pain:'Douleur mécanique', epidural:'Extension épidural / compression' };
+  const radioLabels = { favourable:'Favorable', intermediate:'Intermédiaire', unfavourable:'Défavorable' };
+
+  document.getElementById('sum-ph1').textContent = (kpsLabels[kps] || '—');
+  document.getElementById('sum-ph1-note').textContent = burden ? burdenLabels[burden] : '';
+  document.getElementById('sum-m').textContent = stabLabels[stabilityRaw || stability];
+  document.getElementById('sum-m-note').textContent = sins !== null ? `SINS = ${sins}/18` : '';
+  if (stabilityRaw === 'indeterminate') document.getElementById('sum-m-note').textContent += ' · Traité comme stable';
+  document.getElementById('sum-n').textContent = neuroLabels[neuro] || '—';
+  document.getElementById('sum-n-note').textContent = '';
+  document.getElementById('sum-o').textContent = radioLabels[radio] || '—';
+  document.getElementById('sum-o-note').textContent = '';
+  document.getElementById('sum-p').textContent = decision;
+  document.getElementById('sum-p-note').textContent = '';
+
+  document.getElementById('result-section').classList.add('visible');
+  document.getElementById('result-section').scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  // Mark P pillar
+  document.getElementById('check-3').textContent = '✓';
+  document.getElementById('pcheck-1').textContent = '✓';
+  document.getElementById('ptab-1').classList.add('done');
+}
+
+// ── RESET ──
+function resetAll() {
+  Object.keys(state).forEach(k => state[k] = null);
+  document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.pillar').forEach(p => p.classList.remove('done','active'));
+  document.querySelectorAll('.pillar-check').forEach(c => c.textContent = '');
+  document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('done','active'));
+  document.querySelectorAll('.phase-check').forEach(c => c.textContent = '');
+  document.querySelectorAll('.warn-msg').forEach(w => w.classList.remove('visible'));
+  document.getElementById('sins-input').value = '';
+  document.getElementById('sins-interp').textContent = '';
+  document.getElementById('result-section').classList.remove('visible');
+  document.getElementById('palliative-panel').classList.remove('visible');
+  document.getElementById('phase-0-content').style.display = 'block';
+  document.getElementById('phase-1-content').style.display = 'none';
+  document.getElementById('ptab-0').classList.add('active');
+  state.currentPhase = 0;
+  ['mc-stable','mc-indet','mc-unstable'].forEach(id => document.getElementById(id).classList.remove('selected'));
+  goStep(0);
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// Init
+goStep(0);
+</script>
+</body>
+</html>
