@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SINS – Spine Instability Neoplastic Score</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f2ec;
+    --accent: #7d5a1e;
+    --accent-light: #b8860b;
+    --muted: #7f8c8d;
+    --border: #d9cfc0;
+    --card-bg: #fdfaf5;
+    --stable: #27ae60;
+    --indeterminate: #e67e22;
+    --unstable: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 10%, rgba(125,90,30,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 90%, rgba(26,26,46,0.04) 0%, transparent 60%);
+  }
+
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    background: var(--card-bg);
+  }
+
+  .header-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  .ref-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+    flex-shrink: 0;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .full { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--muted); }
+
+  .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 0.92rem;
+  }
+
+  .score-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink);
+    opacity: 0.12;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .score-badge.active { opacity: 1; color: var(--accent); }
+
+  .options { display: flex; flex-direction: column; gap: 0.45rem; }
+
+  label.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem 0.7rem;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  label.option:hover {
+    background: rgba(125,90,30,0.04);
+    border-color: var(--border);
+  }
+
+  label.option input[type="radio"] {
+    margin-top: 0.15rem;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+
+  label.option:has(input:checked) {
+    background: rgba(125,90,30,0.07);
+    border-color: rgba(125,90,30,0.3);
+  }
+
+  label.option input[type="radio"]:checked + .option-content { color: var(--accent); }
+
+  .option-content { flex: 1; }
+  .option-label { display: block; }
+
+  .option-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.1rem;
+  }
+
+  .option-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  /* Live score bar */
+  .running-score-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .running-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .running-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent);
+    min-width: 3rem;
+    transition: color 0.3s;
+  }
+
+  .running-range {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(125,90,30,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Color zones on track */
+  .progress-track::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+      rgba(39,174,96,0.2) 0%,
+      rgba(39,174,96,0.2) 33%,
+      rgba(230,126,34,0.2) 33%,
+      rgba(230,126,34,0.2) 67%,
+      rgba(192,57,43,0.2) 67%,
+      rgba(192,57,43,0.2) 100%
+    );
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease, background 0.4s ease;
+    width: 0%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Result panel */
+  #result-panel {
+    background: var(--ink);
+    color: #f5f0e8;
+    border-radius: 2px;
+    padding: 2rem 2.5rem;
+    margin-top: 1.2rem;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+
+  #result-panel.visible { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    flex-wrap: wrap;
+  }
+
+  .score-display { text-align: center; flex-shrink: 0; }
+
+  .score-number {
+    font-size: 5rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .score-denom {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 0.2rem;
+  }
+
+  .stability-info { flex: 1; min-width: 200px; }
+
+  .stability-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .stability-name {
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1.1;
+  }
+
+  .stability-name.stable { color: #2ecc71; }
+  .stability-name.indeterminate { color: #f39c12; }
+  .stability-name.unstable { color: #e74c3c; }
+
+  .stability-range {
+    margin-top: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    opacity: 0.5;
+  }
+
+  /* Recommendation box */
+  .reco-box {
+    padding: 1.4rem 1.6rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .reco-box.stable { background: rgba(46,204,113,0.12); border-left: 4px solid #2ecc71; }
+  .reco-box.indeterminate { background: rgba(243,156,18,0.12); border-left: 4px solid #f39c12; }
+  .reco-box.unstable { background: rgba(231,76,60,0.12); border-left: 4px solid #e74c3c; }
+
+  .reco-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+
+  .reco-content { flex: 1; }
+
+  .reco-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.4rem;
+  }
+
+  .reco-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  /* Detail breakdown */
+  .breakdown {
+    margin-top: 1.5rem;
+  }
+
+  .breakdown-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 0.8rem;
+  }
+
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .breakdown-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .breakdown-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    margin-bottom: 0.2rem;
+  }
+
+  .breakdown-val {
+    font-size: 0.88rem;
+    line-height: 1.3;
+  }
+
+  .breakdown-pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent-light);
+    margin-top: 0.15rem;
+  }
+
+  .disclaimer {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    opacity: 0.4;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* Buttons */
+  .btn-wrap { text-align: center; margin: 1.8rem 0 0; }
+
+  button#calculate {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    background: var(--ink);
+    color: #f5f0e8;
+    border: none;
+    padding: 0.8rem 3rem;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 2px 12px rgba(26,26,46,0.2);
+  }
+
+  button#calculate:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(125,90,30,0.3);
+  }
+
+  .btn-reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: 1rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .btn-reset:hover { color: rgba(255,255,255,0.8); }
+
+  #warning {
+    display: none;
+    background: rgba(125,90,30,0.08);
+    border: 1px solid rgba(125,90,30,0.3);
+    border-radius: 2px;
+    padding: 0.7rem 1rem;
+    font-size: 0.88rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  #warning.visible { display: block; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .ref-badge { margin-left: 0; }
+    h1 { font-size: 1.7rem; }
+    .breakdown-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-label">Score d'instabilité · Rachis · Pathologie néoplasique</div>
+    <h1><em>SINS</em> – Spine Instability Neoplastic Score</h1>
+    <p class="subtitle">Évaluation de l'instabilité rachidienne dans les tumeurs vertébrales métastatiques</p>
+  </div>
+  <div class="ref-badge">
+    Fisher et al., <i>Spine</i> 2010;35(22):E1221–E1229<br>
+    Score : 0–18 · 3 catégories de stabilité
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- 1. Localisation -->
+    <div class="card full">
+      <span class="card-num">01 · LOCATION</span>
+      <h2>Localisation de la lésion</h2>
+      <span class="score-badge" id="badge-location">—</span>
+      <div class="options" style="display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;">
+        <label class="option">
+          <input type="radio" name="location" value="3">
+          <div class="option-content">
+            <span class="option-label">Jonctionnel</span>
+            <span class="option-sub">Occiput–C2 · C7–T2 · T11–L1 · L5–S1</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="location" value="2">
+          <div class="option-content">
+            <span class="option-label">Mobile</span>
+            <span class="option-sub">C3–C6 · L2–L4</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="location" value="1">
+          <div class="option-content">
+            <span class="option-label">Semi-rigide</span>
+            <span class="option-sub">T3–T10</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="location" value="0">
+          <div class="option-content">
+            <span class="option-label">Rigide</span>
+            <span class="option-sub">S2–S5</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 2. Douleur -->
+    <div class="card">
+      <span class="card-num">02 · PAIN AT TARGET LESION</span>
+      <h2>Douleur au niveau de la lésion</h2>
+      <span class="score-badge" id="badge-pain">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="pain" value="3">
+          <div class="option-content">
+            <span class="option-label">Douleur mécanique</span>
+            <span class="option-sub">Aggravée par le mouvement / soulagée au repos</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="pain" value="1">
+          <div class="option-content">
+            <span class="option-label">Douleur non mécanique occasionnelle</span>
+            <span class="option-sub">Indépendante du mouvement</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="pain" value="0">
+          <div class="option-content">
+            <span class="option-label">Absence de douleur</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. Qualité lésion -->
+    <div class="card">
+      <span class="card-num">03 · TARGET LESION QUALITY</span>
+      <h2>Caractère de la lésion osseuse</h2>
+      <span class="score-badge" id="badge-bone">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="bone" value="2">
+          <div class="option-content">
+            <span class="option-label">Ostéolytique</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="bone" value="1">
+          <div class="option-content">
+            <span class="option-label">Mixte</span>
+            <span class="option-sub">Ostéolytique + ostéoblastique</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="bone" value="0">
+          <div class="option-content">
+            <span class="option-label">Ostéoblastique</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 4. Alignement radiographique -->
+    <div class="card">
+      <span class="card-num">04 · RADIOGRAPHIC SPINAL ALIGNMENT</span>
+      <h2>Alignement rachidien radiographique</h2>
+      <span class="score-badge" id="badge-align">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="align" value="4">
+          <div class="option-content">
+            <span class="option-label">Subluxation / Translation</span>
+          </div>
+          <span class="option-pts">4 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="align" value="2">
+          <div class="option-content">
+            <span class="option-label">Cyphose / Scoliose</span>
+            <span class="option-sub">Déformation de novo</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="align" value="0">
+          <div class="option-content">
+            <span class="option-label">Alignement normal</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 5. Fracture corps vertébral -->
+    <div class="card">
+      <span class="card-num">05 · VERTEBRAL BODY COMPRESSION FRACTURE</span>
+      <h2>Tassement / fracture du corps vertébral</h2>
+      <span class="score-badge" id="badge-fracture">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="fracture" value="3">
+          <div class="option-content">
+            <span class="option-label">> 50% de compression</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="fracture" value="2">
+          <div class="option-content">
+            <span class="option-label">< 50% de compression</span>
+          </div>
+          <span class="option-pts">2 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="fracture" value="1">
+          <div class="option-content">
+            <span class="option-label">Pas de compression mais > 50% du corps vertébral atteint</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="fracture" value="0">
+          <div class="option-content">
+            <span class="option-label">Aucun des critères ci-dessus</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 6. Atteinte postéro-latérale -->
+    <div class="card">
+      <span class="card-num">06 · POSTEROLATERAL SPINAL ELEMENTS</span>
+      <h2>Atteinte tumorale des éléments postéro-latéraux</h2>
+      <span class="score-badge" id="badge-posterior">—</span>
+      <div class="options">
+        <label class="option">
+          <input type="radio" name="posterior" value="3">
+          <div class="option-content">
+            <span class="option-label">Bilatérale</span>
+            <span class="option-sub">Pédicules, facettes, lame ou processus transverses</span>
+          </div>
+          <span class="option-pts">3 pts</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="posterior" value="1">
+          <div class="option-content">
+            <span class="option-label">Unilatérale</span>
+          </div>
+          <span class="option-pts">1 pt</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="posterior" value="0">
+          <div class="option-content">
+            <span class="option-label">Absente</span>
+          </div>
+          <span class="option-pts">0 pt</span>
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- Running score -->
+  <div class="running-score-bar">
+    <div>
+      <div class="running-label">Score en cours</div>
+      <div class="running-range">Plage : 0–18 pts</div>
+    </div>
+    <div class="running-val" id="running-val">—</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div id="warning">⚠ Veuillez renseigner tous les critères avant de calculer le score.</div>
+
+  <div class="btn-wrap">
+    <button id="calculate">Calculer le SINS →</button>
+  </div>
+
+  <!-- Result panel -->
+  <div id="result-panel">
+    <div class="result-header">
+      <div class="score-display">
+        <div class="score-number" id="res-score">—</div>
+        <div class="score-denom">/ 18</div>
+      </div>
+      <div class="stability-info">
+        <div class="stability-tag">Stabilité rachidienne</div>
+        <div class="stability-name" id="res-stability">—</div>
+        <div class="stability-range" id="res-range">—</div>
+      </div>
+    </div>
+
+    <div class="reco-box" id="reco-box">
+      <div class="reco-icon" id="reco-icon">—</div>
+      <div class="reco-content">
+        <div class="reco-title">Recommandation</div>
+        <div class="reco-text" id="reco-text">—</div>
+      </div>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="breakdown">
+      <div class="breakdown-title">Détail des points par critère</div>
+      <div class="breakdown-grid" id="breakdown-grid"></div>
+    </div>
+
+    <p class="disclaimer">
+      Fisher et al., <i>Spine</i> 2010;35(22):E1221–E1229.<br>
+      Le SINS guide la discussion multidisciplinaire (oncologie / chirurgie rachidienne) — ne se substitue pas à l'évaluation clinique complète.
+    </p>
+
+    <div style="text-align:right;margin-top:1rem;">
+      <button class="btn-reset" id="reset-btn">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>SINS · Spine Instability Neoplastic Score · Fisher et al. 2010</span>
+  <span>Score 0–6 Stable · 7–12 Indéterminé · 13–18 Instable</span>
+</footer>
+
+<script>
+  const stability = {
+    stable: {
+      label: 'Stable', cls: 'stable',
+      range: 'Score 0–6',
+      icon: '✓',
+      boxCls: 'stable',
+      reco: 'Aucune stabilisation chirurgicale nécessaire sur la seule base du score SINS. Une radiothérapie peut être envisagée sans consultation chirurgicale préalable. Réévaluation clinique et radiologique recommandée en cas d\'évolution symptomatique.'
+    },
+    indeterminate: {
+      label: 'Indéterminé', cls: 'indeterminate',
+      range: 'Score 7–12',
+      icon: '⚑',
+      boxCls: 'indeterminate',
+      reco: 'Instabilité potentielle — évaluation par un chirurgien rachidien recommandée avant de débuter la radiothérapie. La décision de stabilisation chirurgicale préventive doit être discutée en RCP en intégrant l\'état général, le pronostic oncologique et les risques opératoires.'
+    },
+    unstable: {
+      label: 'Instable', cls: 'unstable',
+      range: 'Score 13–18',
+      icon: '⚠',
+      boxCls: 'unstable',
+      reco: 'Instabilité rachidienne franche — stabilisation chirurgicale indiquée. Consultation neurochirurgicale ou de chirurgie rachidienne en urgence. La radiothérapie seule est insuffisante et potentiellement dangereuse sans fixation préalable. Le bilan pré-opératoire et l\'optimisation de l\'état général doivent être réalisés en parallèle.'
+    }
+  };
+
+  const fields = ['location','pain','bone','align','fracture','posterior'];
+  const fieldLabels = {
+    location: 'Localisation',
+    pain: 'Douleur',
+    bone: 'Lésion osseuse',
+    align: 'Alignement',
+    fracture: 'Fracture',
+    posterior: 'Éléments post.'
+  };
+
+  const badges = {};
+  fields.forEach(f => { badges[f] = document.getElementById('badge-' + f); });
+
+  function getColor(total) {
+    if (total <= 6) return '#27ae60';
+    if (total <= 12) return '#e67e22';
+    return '#c0392b';
+  }
+
+  function updateRunning() {
+    let partial = 0, filled = 0;
+    fields.forEach(f => {
+      const c = document.querySelector(`input[name="${f}"]:checked`);
+      if (c) { partial += parseInt(c.value); filled++; }
+    });
+    const rv = document.getElementById('running-val');
+    const pf = document.getElementById('progress-fill');
+    if (filled === 0) {
+      rv.textContent = '—';
+      rv.style.color = 'var(--accent)';
+      pf.style.width = '0%';
+    } else {
+      rv.textContent = partial + ' pts';
+      rv.style.color = getColor(partial);
+      const pct = (partial / 18) * 100;
+      pf.style.width = pct + '%';
+      pf.style.background = getColor(partial);
+    }
+  }
+
+  fields.forEach(f => {
+    document.querySelectorAll(`input[name="${f}"]`).forEach(r => {
+      r.addEventListener('change', () => {
+        const v = parseInt(r.value);
+        badges[f].textContent = v + ' pt' + (v > 1 ? 's' : '');
+        badges[f].classList.add('active');
+        updateRunning();
+      });
+    });
+  });
+
+  document.getElementById('calculate').addEventListener('click', () => {
+    let total = 0, allFilled = true;
+    const selectedLabels = {};
+    fields.forEach(f => {
+      const c = document.querySelector(`input[name="${f}"]:checked`);
+      if (!c) { allFilled = false; }
+      else {
+        total += parseInt(c.value);
+        selectedLabels[f] = { val: parseInt(c.value), label: c.closest('label').querySelector('.option-label').textContent.trim() };
+      }
+    });
+
+    const warning = document.getElementById('warning');
+    const panel = document.getElementById('result-panel');
+
+    if (!allFilled) {
+      warning.classList.add('visible');
+      panel.classList.remove('visible');
+      return;
+    }
+    warning.classList.remove('visible');
+
+    let grp;
+    if (total <= 6) grp = stability.stable;
+    else if (total <= 12) grp = stability.indeterminate;
+    else grp = stability.unstable;
+
+    document.getElementById('res-score').textContent = total;
+    const stabEl = document.getElementById('res-stability');
+    stabEl.textContent = grp.label;
+    stabEl.className = 'stability-name ' + grp.cls;
+    document.getElementById('res-range').textContent = grp.range;
+
+    const recoBox = document.getElementById('reco-box');
+    recoBox.className = 'reco-box ' + grp.boxCls;
+    document.getElementById('reco-icon').textContent = grp.icon;
+    document.getElementById('reco-text').textContent = grp.reco;
+
+    // Breakdown
+    const bg = document.getElementById('breakdown-grid');
+    bg.innerHTML = '';
+    fields.forEach(f => {
+      if (!selectedLabels[f]) return;
+      const div = document.createElement('div');
+      div.className = 'breakdown-item';
+      div.innerHTML = `
+        <div class="breakdown-cat">${fieldLabels[f]}</div>
+        <div class="breakdown-val">${selectedLabels[f].label}</div>
+        <div class="breakdown-pts">${selectedLabels[f].val} pt${selectedLabels[f].val > 1 ? 's' : ''}</div>
+      `;
+      bg.appendChild(div);
+    });
+
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    fields.forEach(f => {
+      document.querySelectorAll(`input[name="${f}"]`).forEach(r => r.checked = false);
+      badges[f].textContent = '—';
+      badges[f].classList.remove('active');
+    });
+    document.getElementById('running-val').textContent = '—';
+    document.getElementById('running-val').style.color = 'var(--accent)';
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('result-panel').classList.remove('visible');
+    document.getElementById('warning').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
