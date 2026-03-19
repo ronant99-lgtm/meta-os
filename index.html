@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métastases Osseuses — Outils cliniques · meta-os</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --bg:        #f5f0e8;
+  --bg2:       #ede8dd;
+  --bg3:       #e6dfd2;
+  --surface:   #faf7f2;
+  --border:    #d4c9b4;
+  --border2:   #c4b89e;
+  --text:      #2c2416;
+  --text-dim:  #6b5c42;
+  --text-muted:#9a8a6e;
+  --accent:    #7a5c2e;
+  --accent2:   #b87333;
+  --red:       #8b2020;   --red-bg:    #faeaea;
+  --blue:      #2a5278;   --blue-bg:   #e6eef5;
+  --green:     #3a6b3a;   --green-bg:  #e8f2e8;
+  --orange:    #b05a10;   --orange-bg: #fdf0e4;
+  --purple:    #5c3a7a;   --purple-bg: #f0eaf7;
+  --teal:      #1a6b6b;   --teal-bg:   #e4f2f2;
+  --font-head: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius: 10px;
+  --shadow: 0 2px 14px rgba(44,36,22,0.09);
+  --shadow-lg: 0 6px 28px rgba(44,36,22,0.13);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+  background-image:
+    radial-gradient(ellipse at 10% 10%, rgba(176,90,16,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(42,82,120,0.05) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 2px 12px rgba(44,36,22,0.06);
+}
+.header-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.8rem;
+}
+header h1 {
+  font-family: var(--font-head);
+  font-size: 2.1rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text);
+}
+header h1 em {
+  font-style: italic;
+  color: var(--accent2);
+}
+.header-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+.header-badges {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  border: 1px solid;
+}
+.badge-muted { background: var(--bg3); color: var(--text-dim); border-color: var(--border2); }
+.badge-orange { background: var(--orange-bg); color: var(--orange); border-color: #e8c8a8; }
+
+/* ── MAIN ── */
+main {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+/* ── SECTION ── */
+.section-title {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.section-title span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--bg3);
+  color: var(--text-muted);
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.tool-section { margin-bottom: 2.5rem; }
+
+/* ── GRID ── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── CARD ── */
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+.tool-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.card-red::before    { background: var(--red); }
+.card-blue::before   { background: var(--blue); }
+.card-green::before  { background: var(--green); }
+.card-orange::before { background: var(--orange); }
+.card-purple::before { background: var(--purple); }
+.card-teal::before   { background: var(--teal); }
+
+.card-top {
+  padding: 1.2rem 1.3rem 0.75rem;
+  flex: 1;
+}
+.card-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.card-red    .card-kicker { color: var(--red); }
+.card-blue   .card-kicker { color: var(--blue); }
+.card-green  .card-kicker { color: var(--green); }
+.card-orange .card-kicker { color: var(--orange); }
+.card-purple .card-kicker { color: var(--purple); }
+.card-teal   .card-kicker { color: var(--teal); }
+
+.card-title {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+.card-desc {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid;
+}
+.tag-red    { background: var(--red-bg);    color: var(--red);    border-color: #e8b8b8; }
+.tag-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: #b8cfe0; }
+.tag-green  { background: var(--green-bg);  color: var(--green);  border-color: #b8d8b8; }
+.tag-orange { background: var(--orange-bg); color: var(--orange); border-color: #e8c8a8; }
+.tag-purple { background: var(--purple-bg); color: var(--purple); border-color: #c8b8e0; }
+.tag-teal   { background: var(--teal-bg);   color: var(--teal);   border-color: #b8d8d8; }
+.tag-muted  { background: var(--bg3);       color: var(--text-dim); border-color: var(--border2); }
+
+/* ── QR SECTION ── */
+.card-qr {
+  border-top: 1px solid var(--border);
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg2);
+}
+.qr-box {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.4rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qr-info { flex: 1; min-width: 0; }
+.qr-url {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  background: var(--surface);
+  transition: all 0.15s;
+}
+.card-link:hover {
+  background: var(--accent);
+  color: #f5f0e8;
+  border-color: var(--accent);
+}
+
+/* ── EXTERNAL ── */
+.card-external .card-kicker::after {
+  content: " · externe";
+  opacity: 0.7;
+}
+
+/* ── PRINT ── */
+.print-btn {
+  display: block;
+  margin: 2rem auto 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: var(--accent);
+  color: #f5f0e8;
+  border: none;
+  padding: 0.6rem 2rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.print-btn:hover { background: var(--accent2); }
+
+footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.8;
+}
+
+@media print {
+  body { background: white; }
+  .print-btn { display: none; }
+}
+@media (max-width: 600px) {
+  header h1 { font-size: 1.5rem; }
+  .tool-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Radiothérapie · Métastases osseuses · Institut Léon Bérard — Lyon</div>
+  <h1>Outils cliniques <em>meta-os</em></h1>
+  <p class="header-sub">Scores pronostiques · Frameworks décisionnels · Protocoles</p>
+  <div class="header-badges">
+    <span class="badge badge-muted">9 outils</span>
+    <span class="badge badge-orange">⚠ Aide à la décision — ne se substitue pas au jugement clinique</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══════════════════════════════
+       SECTION 1 — SCORES PRONOSTIQUES
+  ══════════════════════════════ -->
+  <div class="tool-section">
+    <div class="section-title">
+      Scores pronostiques de survie
+      <span>2 outils</span>
+    </div>
+    <div class="tool-grid">
+
+      <!-- KATAGIRI -->
+      <div class="tool-card card-red">
+        <div class="card-top">
+          <div class="card-kicker">Score pronostique</div>
+          <div class="card-title">Score de Katagiri</div>
+          <div class="card-desc">6 critères clinico-biologiques. Score 0–10 stratifié en 3 groupes de risque avec estimations de survie à 3, 6, 12 et 24 mois.</div>
+          <div class="card-tags">
+            <span class="tag tag-muted">Score 0–10</span>
+            <span class="tag tag-red">Faible / Intermédiaire / Haut risque</span>
+            <span class="tag tag-muted">Kubota 2019</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-katagiri"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/katagiri-calculator.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/katagiri-calculator.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- RADES 2019 -->
+      <div class="tool-card card-blue">
+        <div class="card-top">
+          <div class="card-kicker">Score pronostique</div>
+          <div class="card-title">Score de Rades 2019</div>
+          <div class="card-desc">3 critères. Score 8–17 stratifié en groupes A / B / C avec survie à 6 et 12 mois et recommandation de schéma de radiothérapie.</div>
+          <div class="card-tags">
+            <span class="tag tag-muted">Score 8–17</span>
+            <span class="tag tag-blue">Groupes A / B / C</span>
+            <span class="tag tag-muted">Rades 2019</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-rades"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/rades-calculator.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/rades-calculator.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SECTION 2 — MSCC
+  ══════════════════════════════ -->
+  <div class="tool-section">
+    <div class="section-title">
+      Compression médullaire (MSCC)
+      <span>2 outils</span>
+    </div>
+    <div class="tool-grid">
+
+      <!-- RADES MESCC -->
+      <div class="tool-card card-orange">
+        <div class="card-top">
+          <div class="card-kicker">Score MSCC</div>
+          <div class="card-title">Rades 2022 — MESCC</div>
+          <div class="card-desc">Calculateur pronostique spécifique à la compression médullaire métastatique (MESCC). Stratification et recommandation de schéma RT.</div>
+          <div class="card-tags">
+            <span class="tag tag-orange">MESCC</span>
+            <span class="tag tag-muted">Rades 2022</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-rades-mescc"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/rades-mescc-calculator.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/rades-mescc-calculator.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- RADES AMBULATORY -->
+      <div class="tool-card card-teal">
+        <div class="card-top">
+          <div class="card-kicker">Score MSCC</div>
+          <div class="card-title">Rades 2008 — Ambulatoire</div>
+          <div class="card-desc">Score prédictif du statut ambulatoire post-RT dans le cadre d'une MSCC. Aide à l'indication thérapeutique et au pronostic fonctionnel.</div>
+          <div class="card-tags">
+            <span class="tag tag-teal">Statut ambulatoire</span>
+            <span class="tag tag-muted">Rades 2008</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-rades-amb"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/rades-ambulatory-calculator.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/rades-ambulatory-calculator.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SECTION 3 — FRAMEWORKS DÉCISIONNELS
+  ══════════════════════════════ -->
+  <div class="tool-section">
+    <div class="section-title">
+      Instabilité & Frameworks décisionnels
+      <span>3 outils</span>
+    </div>
+    <div class="tool-grid">
+
+      <!-- SINS -->
+      <div class="tool-card card-green">
+        <div class="card-top">
+          <div class="card-kicker">Score d'instabilité</div>
+          <div class="card-title">Score SINS</div>
+          <div class="card-desc">Spinal Instability Neoplastic Score. 6 composantes anatomiques et cliniques. Catégorisation stable / indéterminée / instable avec recommandation chirurgicale.</div>
+          <div class="card-tags">
+            <span class="tag tag-green">Stable · Indéterminé · Instable</span>
+            <span class="tag tag-muted">Score 0–18</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-sins"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/sins-calculator.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/sins-calculator.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOMS -->
+      <div class="tool-card card-purple">
+        <div class="card-top">
+          <div class="card-kicker">Framework décisionnel</div>
+          <div class="card-title">Framework NOMS</div>
+          <div class="card-desc">4 dimensions : Neurologique, Oncologique, Mécanique (SINS), Systémique. Génère 10 voies de décision thérapeutique (cEBRT, SRS/SBRT, chirurgie, palliatif).</div>
+          <div class="card-tags">
+            <span class="tag tag-purple">N · O · M · S</span>
+            <span class="tag tag-muted">Laufer 2013</span>
+            <span class="tag tag-muted">10 pathways</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-noms"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/noms-framework.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/noms-framework.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MNOP -->
+      <div class="tool-card card-orange">
+        <div class="card-top">
+          <div class="card-kicker">Framework décisionnel</div>
+          <div class="card-title">Framework MNOP</div>
+          <div class="card-desc">4 dimensions : Mécanique, Neurologique, Oncologique (radiosensibilité), Préférence de traitement. Intègre le statut systémique en phase préliminaire.</div>
+          <div class="card-tags">
+            <span class="tag tag-orange">M · N · O · P</span>
+            <span class="tag tag-muted">Spratt 2017</span>
+            <span class="tag tag-muted">Lancet Oncol</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-mnop"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/mnop-framework.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/mnop-framework.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SECTION 4 — PROTOCOLES
+  ══════════════════════════════ -->
+  <div class="tool-section">
+    <div class="section-title">
+      Protocoles de service
+      <span>1 outil</span>
+    </div>
+    <div class="tool-grid">
+
+      <!-- MO 2026 -->
+      <div class="tool-card card-teal">
+        <div class="card-top">
+          <div class="card-kicker">Protocole institutionnel</div>
+          <div class="card-title">Métastases Osseuses 2026</div>
+          <div class="card-desc">Protocole ILB complet (MO-1535 MAJ 2026). Doses de référence, algorithme oligométastatique, délinéation, contraintes OAR en 2 fr et DOSIS RCT, scanner dosimétrique, suivi.</div>
+          <div class="card-tags">
+            <span class="tag tag-teal">Palliatif · SBRT · DOSIS</span>
+            <span class="tag tag-muted">Sunyach · Tanguy · Grégoire</span>
+            <span class="tag tag-muted">MO-1535</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-mo2026"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">ronant99-lgtm.github.io/meta-os/MO_os_2026.html</div>
+            <a class="card-link" href="https://ronant99-lgtm.github.io/meta-os/MO_os_2026.html" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SECTION 5 — RESSOURCE EXTERNE
+  ══════════════════════════════ -->
+  <div class="tool-section">
+    <div class="section-title">
+      Ressource externe
+      <span>1 outil</span>
+    </div>
+    <div class="tool-grid">
+
+      <!-- MAYO SPINE SBRT -->
+      <div class="tool-card card-blue card-external">
+        <div class="card-top">
+          <div class="card-kicker">Dosimétrie spinale</div>
+          <div class="card-title">Mayo Clinic — Spine SBRT</div>
+          <div class="card-desc">Application Shiny (Mayo Clinic / Rochester) pour l'optimisation dosimétrique de la SBRT spinale. Calcul des contraintes OAR et paramètres de traitement.</div>
+          <div class="card-tags">
+            <span class="tag tag-blue">Spine SBRT</span>
+            <span class="tag tag-muted">Mayo Clinic</span>
+            <span class="tag tag-muted">Shiny App</span>
+          </div>
+        </div>
+        <div class="card-qr">
+          <div class="qr-box"><div id="qr-mayo"></div></div>
+          <div class="qr-info">
+            <div class="qr-url">radonc-data-science.shinyapps.io/spine_sbrt/</div>
+            <a class="card-link" href="https://radonc-data-science.shinyapps.io/spine_sbrt/" target="_blank">↗ Ouvrir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">⎙ Imprimer / Enregistrer en PDF</button>
+
+</main>
+
+<footer>
+  Institut Léon Bérard · Département de Radiothérapie · Lyon<br>
+  Outils d'aide à la décision — ne se substituent pas au jugement clinique individuel<br>
+  <span style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;">ronant99-lgtm.github.io/meta-os/</span>
+</footer>
+
+<script>
+const QR_SIZE = 90;
+const QR_COLOR = "#2c2416";
+
+function makeQR(id, url) {
+  new QRCode(document.getElementById(id), {
+    text: url,
+    width: QR_SIZE,
+    height: QR_SIZE,
+    colorDark: QR_COLOR,
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
+makeQR("qr-katagiri",  "https://ronant99-lgtm.github.io/meta-os/katagiri-calculator.html");
+makeQR("qr-rades",     "https://ronant99-lgtm.github.io/meta-os/rades-calculator.html");
+makeQR("qr-rades-mescc","https://ronant99-lgtm.github.io/meta-os/rades-mescc-calculator.html");
+makeQR("qr-rades-amb", "https://ronant99-lgtm.github.io/meta-os/rades-ambulatory-calculator.html");
+makeQR("qr-sins",      "https://ronant99-lgtm.github.io/meta-os/sins-calculator.html");
+makeQR("qr-noms",      "https://ronant99-lgtm.github.io/meta-os/noms-framework.html");
+makeQR("qr-mnop",      "https://ronant99-lgtm.github.io/meta-os/mnop-framework.html");
+makeQR("qr-mo2026",    "https://ronant99-lgtm.github.io/meta-os/MO_os_2026.html");
+makeQR("qr-mayo",      "https://radonc-data-science.shinyapps.io/spine_sbrt/");
+</script>
+
+</body>
+</html>

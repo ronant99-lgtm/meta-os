@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole Métastases Osseuses — Radiothérapie 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f5f0e8;
+  --bg2:       #ede8dd;
+  --bg3:       #e6dfd2;
+  --surface:   #faf7f2;
+  --surface2:  #f0ebe0;
+  --border:    #d4c9b4;
+  --border2:   #c4b89e;
+  --text:      #2c2416;
+  --text-dim:  #6b5c42;
+  --text-muted:#9a8a6e;
+  --accent:    #7a5c2e;
+  --accent2:   #b87333;
+  --green:     #3a6b3a;
+  --green-bg:  #e8f2e8;
+  --blue:      #2a5278;
+  --blue-bg:   #e6eef5;
+  --orange:    #b05a10;
+  --orange-bg: #fdf0e4;
+  --red:       #8b2020;
+  --red-bg:    #faeaea;
+  --purple:    #5c3a7a;
+  --purple-bg: #f0eaf7;
+  --teal:      #1a6b6b;
+  --teal-bg:   #e4f2f2;
+  --font-head: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius:    8px;
+  --shadow:    0 2px 12px rgba(44,36,22,0.08);
+  --shadow-lg: 0 4px 24px rgba(44,36,22,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border2);
+  padding: 2rem 2.5rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-title h1 {
+  font-family: var(--font-head);
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.header-title .subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.header-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid;
+}
+.badge-green  { background: var(--green-bg);  color: var(--green);  border-color: #b8d8b8; }
+.badge-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: #b8cfe0; }
+.badge-orange { background: var(--orange-bg); color: var(--orange); border-color: #e8c8a8; }
+.badge-muted  { background: var(--bg3);       color: var(--text-dim); border-color: var(--border); }
+
+/* ── NAV ── */
+.toc-nav {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.toc-nav::-webkit-scrollbar { display: none; }
+.toc-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0;
+}
+.toc-btn {
+  padding: 0.65rem 1rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.toc-btn:hover { color: var(--accent); border-bottom-color: var(--border2); }
+.toc-btn.active { color: var(--accent); border-bottom-color: var(--accent2); }
+
+/* ── LAYOUT ── */
+.main-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 2.5rem 4rem;
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 120px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--border2);
+}
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.section-header .section-ref {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-title .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── DOSE TABLE ── */
+.dose-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+.dose-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: box-shadow 0.2s;
+}
+.dose-row:hover { box-shadow: var(--shadow); }
+.dose-label { font-weight: 500; font-size: 0.9rem; }
+.dose-sublabel { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
+.dose-val {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  text-align: center;
+}
+.dose-bed {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dv-palliative  { background: var(--blue-bg);   color: var(--blue); }
+.dv-sbrt        { background: var(--orange-bg); color: var(--orange); }
+.dv-adjuvant    { background: var(--green-bg);  color: var(--green); }
+.dv-dosis       { background: var(--purple-bg); color: var(--purple); }
+
+/* ── OAR TABLE ── */
+.oar-table-wrap { overflow-x: auto; }
+.oar-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+.oar-table th {
+  background: var(--bg3);
+  padding: 0.55rem 0.9rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  border-bottom: 2px solid var(--border2);
+  white-space: nowrap;
+}
+.oar-table td {
+  padding: 0.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.oar-table tr:last-child td { border-bottom: none; }
+.oar-table tr:hover td { background: var(--bg2); }
+.oar-table .constraint {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.oar-name { font-weight: 500; }
+.oar-site-tag {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  margin-left: 0.4rem;
+  background: var(--bg3);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+/* ── ALGO GRID ── */
+.algo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 700px) { .algo-grid { grid-template-columns: 1fr; } }
+
+.algo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.algo-card-header {
+  padding: 0.75rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.algo-card-header.blue   { background: var(--blue-bg);   color: var(--blue); }
+.algo-card-header.green  { background: var(--green-bg);  color: var(--green); }
+.algo-card-header.orange { background: var(--orange-bg); color: var(--orange); }
+.algo-card-header.purple { background: var(--purple-bg); color: var(--purple); }
+.algo-card-header.teal   { background: var(--teal-bg);   color: var(--teal); }
+
+.algo-body { padding: 1rem 1.1rem; }
+.algo-body ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.algo-body li {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  align-items: flex-start;
+}
+.algo-body li::before {
+  content: "›";
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+.algo-body .tag-dose {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  margin-left: 0.3rem;
+  white-space: nowrap;
+}
+.tag-dose-orange { background: var(--orange-bg); color: var(--orange); }
+.tag-dose-blue   { background: var(--blue-bg);   color: var(--blue); }
+.tag-dose-purple { background: var(--purple-bg); color: var(--purple); }
+.tag-dose-green  { background: var(--green-bg);  color: var(--green); }
+
+/* ── DECISION TREE ── */
+.decision-branch {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.decision-branch-header {
+  padding: 0.7rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.decision-branch-header:hover { filter: brightness(0.97); }
+.decision-branch-header .chevron {
+  margin-left: auto;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+.decision-branch-body { padding: 1rem 1.25rem; display: block; }
+.decision-branch-body.collapsed { display: none; }
+
+.decision-node {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 0.85rem;
+}
+.decision-node:last-child { border-bottom: none; padding-bottom: 0; }
+.node-cond {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  min-width: 80px;
+  text-align: center;
+  font-weight: 500;
+}
+.node-cond-if   { background: var(--bg3);       color: var(--text-dim); border: 1px solid var(--border2); }
+.node-cond-then { background: var(--green-bg);  color: var(--green);   border: 1px solid #c8dfc8; }
+.node-cond-alt  { background: var(--blue-bg);   color: var(--blue);    border: 1px solid #b8cfe0; }
+.node-cond-warn { background: var(--orange-bg); color: var(--orange);  border: 1px solid #e8c8a8; }
+
+/* ── DELINEATION ── */
+.delin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 650px) { .delin-grid { grid-template-columns: 1fr; } }
+
+.delin-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.delin-card-head {
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.delin-card-body { padding: 0.9rem 1rem; }
+.delin-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.83rem;
+  align-items: flex-start;
+}
+.delin-row:last-child { margin-bottom: 0; }
+.vol-tag {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  min-width: 36px;
+  text-align: center;
+}
+.vtag-gtv { background: #fde8d8; color: #8b3a10; border: 1px solid #e8c8a8; }
+.vtag-ctv { background: var(--blue-bg); color: var(--blue); border: 1px solid #b8cfe0; }
+.vtag-ptv { background: var(--green-bg); color: var(--green); border: 1px solid #b8d8b8; }
+
+/* ── SCANNER TABLE ── */
+.scanner-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.scanner-table th {
+  background: var(--bg3);
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.73rem;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  border-bottom: 2px solid var(--border2);
+}
+.scanner-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.scanner-table tr:last-child td { border-bottom: none; }
+.scanner-table tr:hover td { background: var(--bg2); }
+.machine-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 8px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.machine-cyber  { background: var(--orange-bg); color: var(--orange); border: 1px solid #e8c8a8; }
+.machine-versa  { background: var(--blue-bg);   color: var(--blue);   border: 1px solid #b8cfe0; }
+
+/* ── EXTERNAL TOOL LINK ── */
+.tool-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+  box-shadow: var(--shadow);
+}
+.tool-link:hover {
+  border-color: var(--accent2);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+.tool-link-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.tool-link-info .tool-link-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.tool-link-info .tool-link-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+.tool-link-arrow {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* ── REFS ── */
+.ref-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.ref-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.6rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.ref-item a { color: var(--blue); text-decoration: none; }
+.ref-item a:hover { text-decoration: underline; }
+.ref-num {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 24px;
+  padding-top: 0.05rem;
+}
+
+/* ── INFO BOX ── */
+.info-box {
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius);
+  border-left: 3px solid;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.info-box-blue   { background: var(--blue-bg);   border-color: var(--blue);   color: var(--blue); }
+.info-box-orange { background: var(--orange-bg); border-color: var(--orange); color: var(--orange); }
+.info-box-green  { background: var(--green-bg);  border-color: var(--green);  color: var(--green); }
+.info-box-red    { background: var(--red-bg);    border-color: var(--red);    color: var(--red); }
+.info-box strong { font-weight: 600; }
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  background: var(--orange-bg);
+  border: 1px solid #e8c8a8;
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.78rem;
+  color: var(--orange);
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+/* ── PRINT ── */
+.print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: var(--accent);
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.print-btn:hover { background: var(--accent2); }
+
+/* ── TWO-COLUMN ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 650px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+@media print {
+  .site-header { position: static; }
+  .toc-nav { display: none; }
+  .print-btn { display: none; }
+  body { font-size: 12px; }
+  .decision-branch-body.collapsed { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>Protocole Métastases Osseuses — Radiothérapie 2026</h1>
+      <div class="subtitle">MO-1535 · Version MAJ 2026 · Institut Léon Bérard — Lyon</div>
+      <div class="header-meta">
+        <span class="badge badge-green">✓ Validé</span>
+        <span class="badge badge-blue">Rédacteurs : Dr Sunyach · Dr Tanguy · M. Sandt</span>
+        <span class="badge badge-orange">Approbateur : Pr Grégoire</span>
+        <span class="badge badge-muted">Révision : 2 ans</span>
+      </div>
+    </div>
+    <button class="print-btn" onclick="window.print()">⎙ Imprimer / PDF</button>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="toc-nav">
+  <div class="toc-inner">
+    <button class="toc-btn active" onclick="scrollTo('doses')">Doses de référence</button>
+    <button class="toc-btn" onclick="scrollTo('decision')">Aide à la décision</button>
+    <button class="toc-btn" onclick="scrollTo('oligo')">Oligométastatique</button>
+    <button class="toc-btn" onclick="scrollTo('scanner')">Scanner dosimétrique</button>
+    <button class="toc-btn" onclick="scrollTo('delin')">Délinéation</button>
+    <button class="toc-btn" onclick="scrollTo('oar')">Contraintes OAR</button>
+    <button class="toc-btn" onclick="scrollTo('igrt')">IGRT & Suivi</button>
+    <button class="toc-btn" onclick="scrollTo('refs')">Références</button>
+  </div>
+</nav>
+
+<main class="main-content">
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <span>⚠</span>
+    <span><strong>Document interne — usage clinique exclusif.</strong> Ce protocole ne se substitue pas au jugement clinique individuel. Toute adaptation thérapeutique relève de la responsabilité du praticien. Non destiné à une diffusion externe. Version numérique non imprimée susceptible d'avoir été modifiée.</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       1. DOSES DE RÉFÉRENCE
+  ════════════════════════════════════════ -->
+  <section class="section" id="doses">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--blue-bg);color:var(--blue);">💊</div>
+      <h2>Doses de référence</h2>
+    </div>
+
+    <!-- 1A. Palliatif non stéréo -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--blue)"></span>Radiothérapie palliative conventionnelle</div>
+      <div class="dose-grid">
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Dose unique</div>
+            <div class="dose-sublabel">MO douloureuses non compliquées — référence ESTRO ACROP 2022</div>
+          </div>
+          <span class="dose-val dv-palliative">8 Gy / 1 fr</span>
+          <span class="dose-bed">BED<sub>10</sub> = 14,4 Gy</span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Schéma court</div>
+            <div class="dose-sublabel">Alternative acceptable — facilite la re-irradiation</div>
+          </div>
+          <span class="dose-val dv-palliative">20 Gy / 5 fr</span>
+          <span class="dose-bed">BED<sub>10</sub> = 28 Gy</span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Schéma standard</div>
+            <div class="dose-sublabel">MSCC, MO compliquées, post-op</div>
+          </div>
+          <span class="dose-val dv-palliative">30 Gy / 10 fr</span>
+          <span class="dose-bed">BED<sub>10</sub> = 39 Gy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1B. Oligométastatique -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--orange)"></span>Radiothérapie stéréotaxique / oligométastatique</div>
+      <div class="dose-grid">
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Os longs / os plats — isodose 90%</div>
+            <div class="dose-sublabel">Prescription sur isodose 90% (RS = réponse sympt., RR = réponse radiologique)</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+            <span class="dose-val dv-sbrt">5 × 6 Gy (RS)</span>
+            <span class="dose-val dv-sbrt">5 × 7 Gy (RR)</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span class="dose-bed">BED<sub>10</sub> = 48 Gy</span>
+            <span class="dose-bed">BED<sub>10</sub> = 59,5 Gy</span>
+          </div>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Os longs / os plats — dose médiane CTV</div>
+            <div class="dose-sublabel">Prescription sur dose médiane (± SIB 10×4 Gy GTV)</div>
+          </div>
+          <span class="dose-val dv-sbrt">10 × 3 Gy CTV</span>
+          <span class="dose-bed">BED<sub>10</sub> = 39 Gy</span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Spine — Bilsky &gt; 1a · ≤ 3 vertèbres</div>
+            <div class="dose-sublabel">Tous Bilsky — protocole DOSIS RCT</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+            <span class="dose-val dv-sbrt">5 × 6 Gy (RS)</span>
+            <span class="dose-val dv-sbrt">5 × 7 Gy (RR)</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span class="dose-bed">BED<sub>10</sub> = 48 Gy</span>
+            <span class="dose-bed">BED<sub>10</sub> = 59,5 Gy</span>
+          </div>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Spine — Bilsky 0–1a · ≤ 3 vertèbres</div>
+            <div class="dose-sublabel">CyberKnife uniquement</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+            <span class="dose-val dv-sbrt">2 × 12 Gy (RS)</span>
+            <span class="dose-val dv-sbrt">2 × 14 Gy (RR)</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span class="dose-bed">BED<sub>10</sub> = 57,6 Gy</span>
+            <span class="dose-bed">BED<sub>10</sub> = 67,2 Gy</span>
+          </div>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Spine — protocole DOSIS RCT · épidurite</div>
+            <div class="dose-sublabel">PTV HR (GTV+2mm) + PTV BR (vertèbre entière + 2mm)</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+            <span class="dose-val dv-dosis">PTV HR : 48,5 Gy/10fr</span>
+            <span class="dose-val dv-dosis">PTV BR : 30 Gy/10fr</span>
+          </div>
+          <span class="dose-bed"></span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Spine — &gt; 3 vertèbres</div>
+            <div class="dose-sublabel">DOSIS RCT : 10 × 3 Gy CTV + SIB 10 × 4,8 Gy GTV</div>
+          </div>
+          <span class="dose-val dv-dosis">10 × 3 Gy + SIB 4,8 Gy</span>
+          <span class="dose-bed">BED<sub>10</sub> CTV = 39 Gy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1C. PEC adjuvante -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--green)"></span>PEC adjuvante post-chirurgicale</div>
+      <div class="dose-grid">
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Os longs — post-chirurgie</div>
+            <div class="dose-sublabel">Volume incluant l'ensemble du matériel — schéma court possible</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+            <span class="dose-val dv-adjuvant">30 Gy / 10 fr</span>
+            <span class="dose-val dv-adjuvant">20 Gy / 5 fr</span>
+          </div>
+          <span class="dose-bed"></span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Vertèbre — post-décompression/stabilisation</div>
+            <div class="dose-sublabel">Patchell 2005 · technique VMAT · volume classique (ASTRO 2024)</div>
+          </div>
+          <span class="dose-val dv-adjuvant">30 Gy / 10 fr</span>
+          <span class="dose-bed"></span>
+        </div>
+        <div class="dose-row">
+          <div>
+            <div class="dose-label">Vertèbre post-op — SBRT (Redmond 2016)</div>
+            <div class="dose-sublabel">Volume SBRT selon Redmond 2016 — schéma 5 fractions recommandé</div>
+          </div>
+          <span class="dose-val dv-sbrt">SBRT 5 fr</span>
+          <span class="dose-bed"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       2. AIDE À LA DÉCISION
+  ════════════════════════════════════════ -->
+  <section class="section" id="decision">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--green-bg);color:var(--green);">🧭</div>
+      <h2>Aide à la décision</h2>
+      <span class="section-ref">Laufer 2013 · Spratt 2017</span>
+    </div>
+
+    <div class="info-box info-box-blue" style="margin-bottom:1rem;">
+      <strong>Outils interactifs disponibles en ligne</strong> — utiliser ces calculateurs en RCP ou au lit du patient pour les scores NOMS et MNOP.
+    </div>
+
+    <div class="two-col">
+      <a class="tool-link" href="https://ronant99-lgtm.github.io/meta-os/noms-framework.html" target="_blank">
+        <div class="tool-link-icon" style="background:var(--green-bg);color:var(--green);">🏗</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Score NOMS</div>
+          <div class="tool-link-desc">Laufer 2013 · Neurologie, Oncologie, Mécanique, Systémique</div>
+        </div>
+        <span class="tool-link-arrow">↗</span>
+      </a>
+      <a class="tool-link" href="https://ronant99-lgtm.github.io/meta-os/mnop-framework.html" target="_blank">
+        <div class="tool-link-icon" style="background:var(--orange-bg);color:var(--orange);">⚙</div>
+        <div class="tool-link-info">
+          <div class="tool-link-name">Score MNOP</div>
+          <div class="tool-link-desc">Spratt 2017 · Mécanique, Neurologique, Oncologique, Préférence</div>
+        </div>
+        <span class="tool-link-arrow">↗</span>
+      </a>
+    </div>
+
+    <!-- MO non compliquées -->
+    <div class="decision-branch">
+      <div class="decision-branch-header" style="background:var(--blue-bg);color:var(--blue);" onclick="toggleBranch(this)">
+        <span>🦴</span> MO douloureuses <strong style="margin:0 0.3rem">non compliquées</strong>
+        <span class="badge badge-blue" style="font-size:0.68rem">Van der Velden 2022</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="decision-branch-body">
+        <div class="decision-node">
+          <span class="node-cond node-cond-then">1ère ligne</span>
+          <span>Dose unique <strong>8 Gy / 1 fr</strong> recommandée — Grade A, Niveau 1</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-alt">Altrnative</span>
+          <span>20 Gy / 5 fr ou 30 Gy / 10 fr — équivalent en analgésie</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-warn">Attention</span>
+          <span>Flare réactionnel possible J1–J5 : dexaméthasone prophylactique à discuter (Hird 2009)</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-then">Réponse</span>
+          <span>Évaluation à 4 semaines minimum (score douleur + consommation antalgiques)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MO compliquées / MSCC -->
+    <div class="decision-branch">
+      <div class="decision-branch-header" style="background:var(--orange-bg);color:var(--orange);" onclick="toggleBranch(this)">
+        <span>🚨</span> MO compliquées — <strong style="margin:0 0.3rem">Compression médullaire (MSCC)</strong>
+        <span class="badge badge-orange" style="font-size:0.68rem">Oldenburger 2022</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="decision-branch-body">
+        <div class="decision-node">
+          <span class="node-cond node-cond-warn">Urgence</span>
+          <span>Avis neurochirurgical systématique — NOMS/SINS/MNOP à calculer</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-if">Si opérable</span>
+          <span>Chirurgie décompressive + stabilisation → RT post-op 30 Gy/10 fr (Patchell 2005)</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-alt">Si inopérable</span>
+          <span>RT directe : 30 Gy / 10 fr (standard) — schémas courts si mauvais PS</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-then">Stéréo ?</span>
+          <span>SBRT selon Bilsky, ≤ 3 vertèbres, SINS, PS — cf. section Oligométastatique</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ré-irradiation -->
+    <div class="decision-branch">
+      <div class="decision-branch-header" style="background:var(--purple-bg);color:var(--purple);" onclick="toggleBranch(this)">
+        <span>🔁</span> Ré-irradiation palliative
+        <span class="badge" style="background:var(--purple-bg);color:var(--purple);border-color:#c8b8e0;font-size:0.68rem">Van der Velden 2022</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="decision-branch-body">
+        <div class="decision-node">
+          <span class="node-cond node-cond-if">Indication</span>
+          <span>Douleur insuffisamment soulagée, absence de réponse, ou récidive douloureuse après RT initiale — Grade A, Niveau 1</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-then">Dose</span>
+          <span>Dose unique <strong>8 Gy</strong> recommandée — Grade A, Niveau 1 (Huisman 2012)</span>
+        </div>
+        <div class="decision-node">
+          <span class="node-cond node-cond-warn">Délai</span>
+          <span>Évaluation minimale à 4 semaines après RT initiale avant de décider de ré-irradier</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       3. OLIGOMÉTASTATIQUE
+  ════════════════════════════════════════ -->
+  <section class="section" id="oligo">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--orange-bg);color:var(--orange);">🎯</div>
+      <h2>Algorithme oligométastatique</h2>
+      <span class="section-ref">Nguyen 2025 · Sahgal 2023</span>
+    </div>
+
+    <div class="info-box info-box-orange">
+      <strong>Note pour les membres inférieurs :</strong> être très prudent sur les indications de stéréo, et prendre en compte le poids du patient pour les os porteurs.
+    </div>
+
+    <!-- OS LONGS / OS PLATS -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title"><span class="dot" style="background:var(--blue)"></span>Os longs / Os plats</div>
+      <div class="algo-grid">
+        <div class="algo-card">
+          <div class="algo-card-header orange">🎯 Stéréotaxie (SBRT)</div>
+          <div class="algo-body">
+            <ul>
+              <li>GTV &lt; 3 cm <strong>ET</strong> risque fracturaire limité</li>
+              <li>Ou contexte post-opératoire</li>
+              <li>Avis chirurgical préalable</li>
+              <li>Prescription sur isodose 90%</li>
+              <li><span class="tag-dose tag-dose-orange">5 × 6 Gy</span> réponse symptomatique</li>
+              <li><span class="tag-dose tag-dose-orange">5 × 7 Gy</span> réponse radiologique</li>
+              <li>Contention : matelas bluebag</li>
+              <li>Images : IRM + TEP — marge PTV 3 mm</li>
+              <li>Technique : VMAT sur Versa · ETX + monitoring</li>
+            </ul>
+          </div>
+        </div>
+        <div class="algo-card">
+          <div class="algo-card-header blue">📐 Prescription dose médiane</div>
+          <div class="algo-body">
+            <ul>
+              <li>Prescription sur dose médiane CTV</li>
+              <li><span class="tag-dose tag-dose-blue">10 × 3 Gy CTV</span> ± SIB 10 × 4 Gy GTV</li>
+              <li>Contention : confort minimaliste</li>
+              <li>Images : CT — marge PTV 5 mm</li>
+              <li>Technique : VMAT · CBCT (monitoring)</li>
+              <li>IGRT : minimaliste (palliatif, confort)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPINE -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--purple)"></span>Spine (vertèbres)</div>
+      <div class="algo-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="algo-card">
+          <div class="algo-card-header purple">🔢 &gt; 3 vertèbres — Tous Bilsky</div>
+          <div class="algo-body">
+            <ul>
+              <li>Protocole DOSIS RCT</li>
+              <li><span class="tag-dose tag-dose-purple">10 × 3 Gy CTV</span></li>
+              <li>+ SIB <span class="tag-dose tag-dose-purple">10 × 4,8 Gy GTV</span></li>
+              <li>Contention : matelas bluebag</li>
+              <li>Images : IRM — marge PTV 3 mm</li>
+              <li>Technique : VMAT Versa</li>
+              <li>IGRT : CBCT + ETX + monitoring</li>
+              <li>PRV moelle 2 mm</li>
+            </ul>
+          </div>
+        </div>
+        <div class="algo-card">
+          <div class="algo-card-header teal">⚡ ≤ 3 vertèbres — Tous Bilsky</div>
+          <div class="algo-body">
+            <ul>
+              <li>Stéréotaxie</li>
+              <li><span class="tag-dose tag-dose-orange">5 × 6 Gy</span> réponse sympt.</li>
+              <li><span class="tag-dose tag-dose-orange">5 × 7 Gy</span> réponse radio.</li>
+              <li>Contention : matelas confort (CK)</li>
+              <li>Marge PTV : 2 mm CK / 3 mm sinon</li>
+              <li>PRV moelle 2 mm</li>
+              <li>Technique : CyberKnife</li>
+              <li>IGRT : Monitoring CK</li>
+            </ul>
+          </div>
+        </div>
+        <div class="algo-card">
+          <div class="algo-card-header green">🟢 ≤ 3 vertèbres — Bilsky 0–1a</div>
+          <div class="algo-body">
+            <ul>
+              <li>Stéréotaxie CyberKnife</li>
+              <li><span class="tag-dose tag-dose-green">2 × 12 Gy</span> réponse sympt.</li>
+              <li><span class="tag-dose tag-dose-green">2 × 14 Gy</span> réponse radio.</li>
+              <li>Contention : matelas confort (CK)</li>
+              <li>Marge PTV : 2 mm CK</li>
+              <li>PRV moelle 2 mm</li>
+              <li>Technique : CyberKnife</li>
+              <li>IGRT : Monitoring CK</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       4. SCANNER DOSIMÉTRIQUE
+  ════════════════════════════════════════ -->
+  <section class="section" id="scanner">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-bg);color:var(--teal);">📡</div>
+      <h2>Scanner dosimétrique</h2>
+    </div>
+
+    <div class="info-box info-box-blue">
+      <strong>FOV :</strong> ajusté pour inclure au moins une partie des bras (60–70 cm). Impératif pour la création de la zone d'évitement en physique. <strong>Photos Mosaiq :</strong> vue latérale proche, vue d'ensemble latérale (tête aux pieds), vue de face depuis les pieds (écartement des bras).
+    </div>
+
+    <div class="info-box info-box-orange">
+      <strong>Sélection machine stéréo :</strong> Lyon → 1ère intention CyberKnife. Si panne Cyber → bascule Versa (nouvelle installation préférable, positionnement des bras différent).
+    </div>
+
+    <!-- Vertèbres stéréo -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title"><span class="dot" style="background:var(--purple)"></span>Vertèbres en stéréotaxie</div>
+      <div class="oar-table-wrap">
+        <table class="scanner-table">
+          <thead>
+            <tr>
+              <th>Machine</th>
+              <th>Niveau</th>
+              <th>Installation scanner</th>
+              <th>Installation traitement</th>
+              <th>Longueur acquisition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="machine-tag machine-cyber">CyberKnife</span></td>
+              <td>Cervical C2–C7</td>
+              <td>Porte-masque inclinable + normal · grand Moldcare en T + cale polystyrène · bras le long du corps · gros matelas Cyber</td>
+              <td>Identique</td>
+              <td>Mi-orbite → T2 inclus</td>
+            </tr>
+            <tr>
+              <td><span class="machine-tag machine-cyber">CyberKnife</span></td>
+              <td>Thoracique</td>
+              <td>Têtière sur matelas · bras le long du corps · gros matelas Cyber</td>
+              <td>Têtière au-dessus matelas · identique</td>
+              <td>D1–D6 : base crâne → L2 · D7–D12 : C6 → sacrum</td>
+            </tr>
+            <tr>
+              <td><span class="machine-tag machine-cyber">CyberKnife</span></td>
+              <td>Lombaire / Sacré</td>
+              <td>Têtière sur matelas · bras le long du corps · gros matelas Cyber</td>
+              <td>Têtière au-dessus matelas · identique</td>
+              <td>T10 → sacrum</td>
+            </tr>
+            <tr>
+              <td><span class="machine-tag machine-versa">Versa</span></td>
+              <td>Cervical</td>
+              <td>Masque 5 points / Moldcare · Matelas + Kneefix</td>
+              <td>—</td>
+              <td>Mi-orbite → T2 inclus</td>
+            </tr>
+            <tr>
+              <td><span class="machine-tag machine-versa">Versa</span></td>
+              <td>Thoracique</td>
+              <td>Posirest (bras au-dessus de la tête) · Matelas + Kneefix</td>
+              <td>—</td>
+              <td>D1–D6 : base crâne → L2 · D7–D12 : C6 → sacrum</td>
+            </tr>
+            <tr>
+              <td><span class="machine-tag machine-versa">Versa</span></td>
+              <td>Lombaire / Sacré</td>
+              <td>L1–L2 : Posirest (bras au-dessus tête) · à partir L3 : bras sur poitrine · Matelas + Kneefix</td>
+              <td>—</td>
+              <td>T10 → sacrum</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-dim);">
+        ⚠ Inclure la 1<sup>ère</sup> côte pour toutes les irradiations cervicales ou dorsales jusqu'à D12 (facilite le recalage). Inclure les crêtes iliaques pour dorsales en dessous de D6 et lombaire.
+      </div>
+    </div>
+
+    <!-- Autres cas -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--blue)"></span>Autres localisations</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:0.4rem;font-size:0.85rem;">
+        <li>› Scanner 3D centré sur l'os atteint, <strong>sans injection</strong>, coupes 5 mm (1 mm si stéréo)</li>
+        <li>› Os longs et plats : acquisition sur l'ensemble de l'os + articulations sup et inf (max 399 coupes)</li>
+        <li>› Porteurs de prothèses : reconstructions IMAR envoyées en complément</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       5. DÉLINÉATION
+  ════════════════════════════════════════ -->
+  <section class="section" id="delin">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--green-bg);color:var(--green);">✏️</div>
+      <h2>Délinéation</h2>
+      <span class="section-ref">Cox 2012 · Dunne 2019–2022 · Redmond 2016 · Nguyen 2021–2025</span>
+    </div>
+
+    <div class="delin-grid">
+      <!-- Non stéréotaxique -->
+      <div>
+        <div style="font-family:var(--font-head);font-size:1rem;margin-bottom:0.75rem;color:var(--text);">Traitement conventionnel</div>
+
+        <div class="delin-card" style="margin-bottom:0.75rem;">
+          <div class="delin-card-head" style="background:var(--blue-bg);color:var(--blue);">
+            <span>🦴</span> Os longs / os plats
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-gtv">GTV</span>
+              <span>Métastase visible (lyse / condensation) + extension parties molles</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>Marge ≥ 1 cm autour GTV. Si matériel chirurgical : inclure le matériel</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delin-card">
+          <div class="delin-card-head" style="background:var(--purple-bg);color:var(--purple);">
+            <span>🦴</span> Vertèbres
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-gtv">GTV</span>
+              <span>Corps vertébral entier + envahissement parties molles (notamment intra-canalaire en IRM)</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>GTV + 5–10 mm dans les tissus mous si MASS / effraction corticale</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">Post-op</span>
+              <span>CTV = ensemble du matériel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stéréotaxique -->
+      <div>
+        <div style="font-family:var(--font-head);font-size:1rem;margin-bottom:0.75rem;color:var(--text);">Traitement stéréotaxique</div>
+
+        <div class="delin-card" style="margin-bottom:0.75rem;">
+          <div class="delin-card-head" style="background:var(--orange-bg);color:var(--orange);">
+            <span>🎯</span> Os longs / os plats
+            <span style="margin-left:auto;font-size:0.68rem;font-weight:400;">Nguyen 2021–2025</span>
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-gtv">GTV</span>
+              <span>Métastase visible + extension parties molles (Nguyen 2021)</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>Marge minimale 3–5 mm selon utilisation IRM de fusion (Nguyen ISRS 2025)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delin-card" style="margin-bottom:0.75rem;">
+          <div class="delin-card-head" style="background:var(--purple-bg);color:var(--purple);">
+            <span>🎯</span> Vertèbres hors sacrées
+            <span style="margin-left:auto;font-size:0.68rem;font-weight:400;">Cox 2012 · SC24</span>
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-gtv">GTV</span>
+              <span>Lésion visible (Cox 2012)</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>Selon Cox 2012. Si atteinte épidurale : marge anatomique 5 mm (excluant moelle) dans compartiment épidural y compris direction crânio-caudale. CTV en « donut » encouragé en cas d'atteinte épidurale. Si atteinte paravertébrale : marge min 5 mm au-delà GTV.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delin-card" style="margin-bottom:0.75rem;">
+          <div class="delin-card-head" style="background:var(--teal-bg);color:var(--teal);">
+            <span>🎯</span> Vertèbres sacrées
+            <span style="margin-left:auto;font-size:0.68rem;font-weight:400;">Dunne 2019</span>
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-gtv">GTV</span>
+              <span>Selon Dunne 2019 (consensus international ISRS)</span>
+            </div>
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>Selon Dunne 2019 — <a href="https://doi.org/10.1016/j.radonc.2019.09.021" target="_blank" style="color:var(--blue)">doi:10.1016/j.radonc.2019.09.021</a></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="delin-card">
+          <div class="delin-card-head" style="background:var(--green-bg);color:var(--green);">
+            <span>🎯</span> Vertèbres post-op
+            <span style="margin-left:auto;font-size:0.68rem;font-weight:400;">Redmond 2016</span>
+          </div>
+          <div class="delin-card-body">
+            <div class="delin-row">
+              <span class="vol-tag vtag-ctv">CTV</span>
+              <span>Selon Redmond 2016 — <a href="https://doi.org/10.1016/j.ijrobp.2016.09.014" target="_blank" style="color:var(--blue)">doi:10.1016/j.ijrobp.2016.09.014</a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOSIS RCT -->
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title"><span class="dot" style="background:var(--purple)"></span>Volumes cibles DOSIS RCT (SIB)</div>
+      <div class="two-col">
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--purple);margin-bottom:0.5rem;">PTV HR — 48,5 Gy / 10 fr</div>
+          <div class="delin-row" style="font-size:0.83rem;">
+            <span class="vol-tag vtag-ptv">PTV HR</span>
+            <span>GTV + 2 mm, excluant le PRV moelle</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--purple);margin-bottom:0.5rem;">PTV BR — 30 Gy / 10 fr</div>
+          <div class="delin-row" style="font-size:0.83rem;">
+            <span class="vol-tag vtag-ptv">PTV BR</span>
+            <span>Vertèbre entière + 2 mm isotrope, moins PTV haute dose. Moelle incluse en dose conventionnelle.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OAR list -->
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title"><span class="dot" style="background:var(--red)"></span>Organes à risque à contourer (selon site)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;font-size:0.8rem;">
+        <span class="badge badge-muted">Chiasma</span>
+        <span class="badge badge-muted">Nerfs optiques</span>
+        <span class="badge badge-muted">Tronc cérébral</span>
+        <span class="badge badge-muted">Canal spinal / Sac dural</span>
+        <span class="badge badge-muted">Plexus brachial</span>
+        <span class="badge badge-muted">Cauda equina</span>
+        <span class="badge badge-muted">Œsophage</span>
+        <span class="badge badge-muted">Larynx / Trachée</span>
+        <span class="badge badge-muted">Reins</span>
+        <span class="badge badge-muted">Foie</span>
+        <span class="badge badge-muted">Tube digestif</span>
+        <span class="badge badge-muted">Col et tête fémorale</span>
+        <span class="badge badge-muted">Nerfs</span>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.6rem;">
+        Plexus brachial selon Kong 2011 · Cauda equina = Sac dural selon Dunne 2021 (doi:10.1016/j.ijrobp.2021.08.023)
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       6. CONTRAINTES OAR
+  ════════════════════════════════════════ -->
+  <section class="section" id="oar">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-bg);color:var(--red);">🎯</div>
+      <h2>Contraintes OAR</h2>
+    </div>
+
+    <!-- 2 fractions -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title"><span class="dot" style="background:var(--orange)"></span>Contraintes — 2 fractions (stéréo CyberKnife)</div>
+      <div class="oar-table-wrap">
+        <table class="oar-table">
+          <thead>
+            <tr>
+              <th>OAR</th>
+              <th>Paramètre</th>
+              <th>Contrainte</th>
+              <th>Remarque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="oar-name">Moelle (PRV 2 mm)</td><td>Dmax</td><td class="constraint">18,3 Gy / 19,7 Gy</td><td>Selon épidurite (sans / avec)</td></tr>
+            <tr><td class="oar-name">Queue de cheval (PRV)</td><td>Dmax</td><td class="constraint">18,3 Gy / 19,7 Gy</td><td>Selon épidurite (sans / avec)</td></tr>
+            <tr><td class="oar-name">Racines</td><td>—</td><td class="constraint">&lt; 105%</td><td></td></tr>
+            <tr><td class="oar-name">Plexus brachial</td><td>Dmax</td><td class="constraint">≤ 26 Gy</td><td>Kong 2011</td></tr>
+            <tr><td class="oar-name">Parotides</td><td>Dmoy</td><td class="constraint">&lt; 8 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Pharynx</td><td>Dmax</td><td class="constraint">&lt; 22 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Pharynx</td><td>Dmoy</td><td class="constraint">≤ 9 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Larynx</td><td>Dmax</td><td class="constraint">≤ 20 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Larynx</td><td>Dmoy</td><td class="constraint">&lt; 8 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Cavité orale</td><td>Dmoy</td><td class="constraint">&lt; 8 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Trachée / Bronches</td><td>Dmax</td><td class="constraint">&lt; 22 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Poumon</td><td>V10</td><td class="constraint">&lt; 10%</td><td></td></tr>
+            <tr><td class="oar-name">Poumon</td><td>V5</td><td class="constraint">&lt; 25%</td><td></td></tr>
+            <tr><td class="oar-name">Poumon</td><td>V20</td><td class="constraint">&lt; 3–5%</td><td></td></tr>
+            <tr><td class="oar-name">Poumon</td><td>Dmoy</td><td class="constraint">&lt; 5 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Cœur</td><td>Dmax</td><td class="constraint">&lt; 20 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Œsophage</td><td>Dmax</td><td class="constraint">&lt; 22 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Œsophage</td><td>D2cc</td><td class="constraint">20,4 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Œsophage</td><td>D5cc</td><td class="constraint">17,7 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Estomac / Duodénum / Côlon</td><td>Dmax</td><td class="constraint">&lt; 20 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Foie</td><td>Dmax</td><td class="constraint">&lt; 24 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Foie</td><td>Dmoy</td><td class="constraint">&lt; 8 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Reins</td><td>Dmax</td><td class="constraint">V18 &lt; 67%</td><td></td></tr>
+            <tr><td class="oar-name">Reins</td><td>Dmoy</td><td class="constraint">≤ 6 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Intestin grêle</td><td>Dmax</td><td class="constraint">≤ 20 Gy</td><td></td></tr>
+            <tr><td class="oar-name">Rectum</td><td>Dmax</td><td class="constraint">≤ 20 Gy</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DOSIS RCT -->
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--purple)"></span>Contraintes DOSIS RCT (Table 2)</div>
+      <div class="oar-table-wrap">
+        <table class="oar-table">
+          <thead>
+            <tr>
+              <th>OAR</th>
+              <th>Paramètre</th>
+              <th>5 fractions (sans épidurite)</th>
+              <th>10 fractions (avec épidurite)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="oar-name">Moelle épinière PRV</td><td>Dmax à 0,1 cm³</td><td class="constraint">&lt; 23,8 Gy</td><td class="constraint">&lt; 35 Gy</td></tr>
+            <tr><td class="oar-name">Cauda equina</td><td>Dmax à 0,1 cm³</td><td class="constraint">&lt; 25 Gy</td><td class="constraint">&lt; 37,5 Gy</td></tr>
+            <tr><td class="oar-name">Œsophage</td><td>Dmax à 1 cm³</td><td class="constraint">&lt; 30 Gy</td><td class="constraint">&lt; 40 Gy</td></tr>
+            <tr><td class="oar-name">Poumons</td><td>MLD</td><td class="constraint">&lt; 10 Gy</td><td class="constraint">&lt; 10 Gy</td></tr>
+            <tr><td class="oar-name">Reins</td><td>Dmean</td><td class="constraint">&lt; 10 Gy</td><td class="constraint">&lt; 12 Gy</td></tr>
+            <tr><td class="oar-name">Intestin</td><td>Dmax à 1 cm³</td><td class="constraint">&lt; 24 Gy</td><td class="constraint">&lt; 37 Gy</td></tr>
+            <tr><td class="oar-name">Foie</td><td>Dmean</td><td class="constraint">&lt; 12,5 Gy</td><td class="constraint">&lt; 17,5 Gy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.6rem;">
+        Vx = volume relatif de l'OAR recevant au moins x Gy · Dmax = dose maximale · Dmean = dose moyenne
+      </div>
+    </div>
+
+    <!-- Recueil DOSIS -->
+    <div class="info-box info-box-green" style="margin-top:1rem;">
+      <strong>Recueil DOSIS RCT :</strong> Pour les traitements stéréotaxiques en 2 fractions, remplir le fichier de recueil : <code style="font-family:var(--font-mono);font-size:0.8rem;">G:\BUREAU\Z-RADIOTHERAPIE\Groupe Meta Os</code>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       7. IGRT & SUIVI
+  ════════════════════════════════════════ -->
+  <section class="section" id="igrt">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-bg);color:var(--teal);">📷</div>
+      <h2>IGRT & Suivi</h2>
+      <span class="section-ref">Sahgal 2023</span>
+    </div>
+
+    <div class="two-col">
+      <div class="algo-card">
+        <div class="algo-card-header teal">📡 Validation positionnement</div>
+        <div class="algo-body">
+          <ul>
+            <li>VMAT : CBCT pré-traitement</li>
+            <li>Stéréotaxie : monitoring Exactrac pendant la séance</li>
+            <li>Traitements longs non stéréotaxiques : monitoring surfacique (AlignRT ou EXD) possible</li>
+            <li>CyberKnife : modalité Spine (tracking automatisé)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="algo-card">
+        <div class="algo-card-header green">🗓 Suivi post-traitement</div>
+        <div class="algo-body">
+          <ul>
+            <li>Visite hebdomadaire habituelle pendant le traitement</li>
+            <li><strong>RT palliative :</strong> surveillance déléguée à l'oncologue référent (contexte palliatif)</li>
+            <li><strong>RT stéréotaxique :</strong> contrôle à 1 mois (efficacité + toxicité aiguë)</li>
+            <li>Suivi optimal stéréo : tous les 3 mois (an 1) → 3–6 mois (an 2–3) → 6 mois ensuite</li>
+            <li>Imagerie recommandée à chaque visite (IRM rachidienne / TEP)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       8. RÉFÉRENCES
+  ════════════════════════════════════════ -->
+  <section class="section" id="refs">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--bg3);color:var(--text-dim);">📚</div>
+      <h2>Références</h2>
+    </div>
+
+    <ul class="ref-list">
+      <li class="ref-item"><span class="ref-num">1</span><span>Weber W et al. Strahlenther Onkol 1992;168:275–80. Irradiation percutanée des métastases ostéolytiques.</span></li>
+      <li class="ref-item"><span class="ref-num">2</span><span>Koswig S et al. Strahlenther Onkol 1999;175:509–14. RT palliative des métastases osseuses, analyse rétrospective 176 patients.</span></li>
+      <li class="ref-item"><span class="ref-num">3</span><span>Thureau S et al. Cancer Radiother. 2016 Sep;20 Suppl:S227–34. RECORAD. <a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=Thureau+S,+Vieillard+M-H,+Supiot+S,+Lagrange+J-L." target="_blank">PubMed</a></span></li>
+      <li class="ref-item"><span class="ref-num">4</span><span>Hird A et al. Clin Oncol 2009;21:329–35. Dexaméthasone prophylaxie du flare post-RT.</span></li>
+      <li class="ref-item"><span class="ref-num">5</span><span>Huisman M et al. Int J Radiat Oncol Biol Phys 2012;84:8–14. Efficacité de la ré-irradiation — revue systématique et méta-analyse.</span></li>
+      <li class="ref-item"><span class="ref-num">6</span><span>Chow E et al. Clin Oncol 2012;24:112–24. Update revue systématique RT palliative métastases osseuses.</span></li>
+      <li class="ref-item"><span class="ref-num">7</span><span>Chow E et al. Int J Radiat Oncol Biol Phys 2012;82:1730–7. Consensus international endpoints RT palliative.</span></li>
+      <li class="ref-item"><span class="ref-num">8</span><span>Patchell RA et al. Lancet 2005. RT post-opératoire MSCC. Référence pour 30 Gy/10 fr post-décompression.</span></li>
+      <li class="ref-item"><span class="ref-num">9</span><span>Roos DE et al. Radiother Oncol 2005;75:54–63. TROG 96.05. 8 Gy/1fr vs 20 Gy/5 fr pour douleur neuropathique.</span></li>
+      <li class="ref-item"><span class="ref-num">10</span><span>Cox BW et al. Int J Radiat Oncol Biol Phys 2012;83(5):e597–e605. <a href="https://doi.org/10.1016/j.ijrobp.2012.03.009" target="_blank">doi:10.1016/j.ijrobp.2012.03.009</a>. Délinéation vertèbres SBRT.</span></li>
+      <li class="ref-item"><span class="ref-num">11</span><span>Dunne EM et al. Radiother Oncol 2020;145:21–29. Consensus délinéation vertèbres sacrées SBRT. <a href="https://doi.org/10.1016/j.radonc.2019.09.021" target="_blank">doi:10.1016/j.radonc.2019.09.021</a></span></li>
+      <li class="ref-item"><span class="ref-num">12</span><span>Dunne EM et al. Int J Radiat Oncol Biol Phys 2022;112(1):114–120. Cauda equina. <a href="https://doi.org/10.1016/j.ijrobp.2021.08.023" target="_blank">doi:10.1016/j.ijrobp.2021.08.023</a></span></li>
+      <li class="ref-item"><span class="ref-num">13</span><span>Redmond KJ et al. Int J Radiat Oncol Biol Phys 2017. Consensus délinéation post-op SBRT métastases spinales. <a href="https://doi.org/10.1016/j.ijrobp.2016.09.014" target="_blank">doi:10.1016/j.ijrobp.2016.09.014</a></span></li>
+      <li class="ref-item"><span class="ref-num">14</span><span>Nguyen TK et al. Int J Radiat Oncol Biol Phys 2022;112(2). Patterns de délinéation SBRT métastases osseuses non-spinales, international multicentrique.</span></li>
+      <li class="ref-item"><span class="ref-num">15</span><span>Nguyen TK et al. Radiother Oncol 2025;205:110717. SBRT métastases osseuses non-spinales : méta-analyse et guidelines ISRS. <a href="https://doi.org/10.1016/j.radonc.2025.110717" target="_blank">doi:10.1016/j.radonc.2025.110717</a></span></li>
+      <li class="ref-item"><span class="ref-num">16</span><span>Sahgal A et al. Pract Radiat Oncol 2023;13(6). Guideline CCO — planification et délivrance SBRT spinale. <a href="https://doi.org/10.1016/j.prro.2023.08.001" target="_blank">doi:10.1016/j.prro.2023.08.001</a></span></li>
+      <li class="ref-item"><span class="ref-num">17</span><span>Kong FM et al. Int J Radiat Oncol Biol Phys 2011;81(5):1442–1457. Limites de dose OAR RT thoracique (plexus brachial). <a href="https://doi.org/10.1016/j.ijrobp.2010.07.1977" target="_blank">doi:10.1016/j.ijrobp.2010.07.1977</a></span></li>
+      <li class="ref-item"><span class="ref-num">18</span><span>Lutz S et al. Pract Radiat Oncol 2017;7(1). RT palliative métastases osseuses : update guideline ASTRO Evidence-Based.</span></li>
+      <li class="ref-item"><span class="ref-num">19</span><span>Oldenburger E et al. Radiother Oncol 2022;173:240–250. ESTRO ACROP guidelines RT métastases osseuses compliquées. <a href="https://doi.org/10.1016/j.radonc.2022.05.029" target="_blank">doi</a></span></li>
+      <li class="ref-item"><span class="ref-num">20</span><span>Van der Velden JM et al. Radiother Oncol 2022;173:197–206. ESTRO ACROP guidelines RT métastases osseuses non compliquées. <a href="https://doi.org/10.1016/j.radonc.2022.05.024" target="_blank">doi:10.1016/j.radonc.2022.05.024</a></span></li>
+    </ul>
+  </section>
+
+</main>
+
+<script>
+// Nav scroll
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Active nav on scroll
+const sections = ['doses','decision','oligo','scanner','delin','oar','igrt','refs'];
+const btns = document.querySelectorAll('.toc-btn');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 160) current = id;
+  });
+  btns.forEach((b, i) => {
+    b.classList.toggle('active', sections[i] === current);
+  });
+});
+
+// Toggle branches
+function toggleBranch(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const collapsed = body.classList.toggle('collapsed');
+  chevron.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+}
+</script>
+
+</body>
+</html>
